@@ -1,7 +1,7 @@
-import CardMasuk from "../AduanMasuk/CardsMasuk";
+import CardMasuk from "../../CardsMasuk";
 import IsiMenu from "./IsiMenu";
 import Navigasi from "./Navigasi";
-const SideBarMenu = () => {
+const Dashboard = () => {
     return (
         <div>
             <div>
@@ -67,4 +67,4 @@ const SideBarMenu = () => {
     );
 }
  
-export default SideBarMenu;
+export default Dashboard;

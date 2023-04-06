@@ -1,6 +1,6 @@
 const CardMasuk = () => {
     return (
-        <div className="flex justify-around items-center w-[70%] bg-slate-600 rounded-md m-auto p-10 mt-10">
+        <div className="flex justify-around items-center w-[65%] bg-slate-600 rounded-md m-auto p-10 mt-10">
             <div className="w-[400px]">
                 <img src="../../../public/www.jpg" alt="" />
             </div>
