@@ -16,12 +16,12 @@ const Komentar = (props) => {
             <h2 className="text-sm text-gray-600">Dari: {props.username}</h2>
             <hr className="mt-2" />
             <div className="mt-3 text-sm px-1">
-                <p>kritik</p>
+                <p className="font-semibold">kritik</p>
                 <p className="">{
                     (props.kritik.length) <= 75 ? props.kritik : props.kritik.slice(0,70) + "..." 
                 }</p>
             </div>
-            <button className="self-end mt-2 cursor-pointer" onClick={selengkapnya}>selengkapnya</button>
+            <button className="self-end mt-4 cursor-pointer text-sm" onClick={selengkapnya}>selengkapnya</button>
         </div>
     );
 }
