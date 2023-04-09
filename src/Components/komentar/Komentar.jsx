@@ -18,7 +18,7 @@ const Komentar = (props) => {
             <div className="mt-3 text-sm px-1">
                 <p className="font-semibold">kritik</p>
                 <p className="">{
-                    (props.kritik.length) <= 75 ? props.kritik : props.kritik.slice(0,70) + "..." 
+                    (props.kritik.length) <= 70 ? props.kritik : props.kritik.slice(0,70) + "..." 
                 }</p>
             </div>
             <button className="self-end mt-4 cursor-pointer text-sm" onClick={selengkapnya}>selengkapnya</button>
