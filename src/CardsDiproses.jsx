@@ -1,8 +1,8 @@
 import Cards from "./Components/Pelayanan/Cards";
-const CardMasuk = () => {
+const CardDiproses = () => {
     return (
         <Cards/>
     );
 }
  
-export default CardMasuk;
+export default CardDiproses;

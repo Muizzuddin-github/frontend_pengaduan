@@ -6,6 +6,8 @@ import { createBrowserRouter,RouterProvider } from 'react-router-dom'
 import Dashboard from './Components/Menu/Dashboard'
 import Kisar from './Kisar'
 import KisarUser from './KisarUser'
+import Daftar from './Components/Daftar/Daftar'
+
 
 const router = createBrowserRouter([
   {
@@ -17,6 +19,10 @@ const router = createBrowserRouter([
   {
     path : "/login",
     element :  <App />
+  },
+  {
+    path : "/daftar",
+    element :  <Daftar/>
   },
   {
     path : "/dashboard/kritik-saran",
