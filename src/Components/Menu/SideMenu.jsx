@@ -1,5 +1,53 @@
 import IsiMenu from "./IsiMenu";
-const SideMenu = () => {
+import CardsPengaduan from "../../CardsPengaduan";
+const SideMenu = (props) => {
+    const showCardMasuk = () =>{
+        props.pengaduan([
+            {
+                id : props.id,
+                nama : props.nama,
+                kendala : props.kendala,
+                lokasi : props.lokasi
+            }
+        ])
+    }
+    const showCardproses = () =>{
+        const btn = document.querySelector(".btn-cards")
+        btn.classList.add("hidden")
+        props.setPengaduan([
+            {
+                id : 1,
+                nama : 'tito',
+                kendala : 'banjir',
+                lokasi : 'jl.bunga'
+            },
+        ])
+    }
+    const showCardSelesai = () =>{
+        const btn = document.querySelector(".btn-cards")
+        btn.classList.add("hidden")
+        props.setPengaduan([
+            {
+                id : 1,
+                nama : 'ada',
+                kendala : 'banjir',
+                lokasi : 'Jl. bulan'
+            }
+        ])
+    } 
+
+    const showCardDitolak = () =>{
+        const btn = document.querySelector(".btn-cards")
+        btn.classList.add("hidden")
+        props.setPengaduan([
+            {
+                id : 1,
+                nama : 'Budi',
+                kendala : 'banjir',
+                lokasi : 'Jl. bulan'
+            }
+        ])
+    } 
     return (
         <div>
             <div id="drawer-navigation" className="fixed top-0 left-0 z-40 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white w-80 dark:bg-gray-800" tabIndex={-1} aria-labelledby="drawer-navigation-label">
@@ -11,7 +59,7 @@ const SideMenu = () => {
                 <div className="py-4 overflow-y-auto">
                     <ul className="space-y-2 font-medium">
                         <li>
-                        <a href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700" >
+                        <a href="#"  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700" >
                             <ion-icon name="mail" size="large"></ion-icon>
                             <IsiMenu Isi="Kritik & Saran"/>
                         </a>
@@ -34,18 +82,18 @@ const SideMenu = () => {
                             </a>
                         </li>
                         <li>
-                            <a href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <a href="#" onClick={showCardproses} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                                 <ion-icon name="refresh-circle" size="large"></ion-icon>
                                 <IsiMenu Isi="Pengaduan Diproses"/>
                             </a>
                         </li>
                         <li>
-                            <a href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <a href="#" onClick={showCardSelesai} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                                 <ion-icon name="checkmark-done-circle" size="large"></ion-icon>
                                 <IsiMenu Isi="Pengaduan Selesai"/>
                             </a>
                         </li><li>
-                            <a href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <a href="#" onClick={showCardDitolak} className=" flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                                 <ion-icon name="close-circle" size="large"></ion-icon>
                                 <IsiMenu Isi="Pengaduan Ditolak"/>
                             </a>
