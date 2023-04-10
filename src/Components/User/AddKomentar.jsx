@@ -22,9 +22,13 @@ const AddKomentar = (props) => {
     }
 
     const tutup = (e) => {
-        const addForm = e.target.parentElement.parentElement.parentElement
+        const form = e.target.parentElement.parentElement
+        const addForm = form.parentElement
+        
         addForm.parentElement.classList.remove("flex")
         addForm.parentElement.classList.add("hidden")
+        form.reset()
+
     }
 
     return ( 
