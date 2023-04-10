@@ -1,6 +1,6 @@
-import CardsPengaduan from "../../CardsPengaduan";
-import SideMenu from "./SideMenu";
-import Navigasi from "./Navigasi";
+import CardsPengaduan from "./CardsPengaduan";
+import SideMenu from "./Components/Menu/SideMenu";
+import Navigasi from "./Components/Menu/Navigasi";
 import { useState } from "react";
 const Dashboard = (props) => {
     const [id,setID] = useState(0)
@@ -9,28 +9,28 @@ const Dashboard = (props) => {
             id : 1,
             nama : "Agus",
             kendala : 'banjir',
-            lokasi : 'Jl.ahshshs',
+            lokasi : 'Jl.Matahari',
             status : "terkirim"
         },
         {
             id : 2,
             nama : "Budi",
             kendala : 'tsunami',
-            lokasi : 'Jl.ahshshs',
-            status : "terkrim"
+            lokasi : 'Jl.Matahari',
+            status : "terkirim"
         },
         {
             id : 3,
             nama : "Bambang",
             kendala : 'skill issue',
-            lokasi : 'Jl.ahshshs',
+            lokasi : 'Jl.Matahari',
             status : "terkirim"
         },
         {
             id : 4,
             nama : "Siti",
             kendala : 'banjir',
-            lokasi : 'Jl.ahshshs',
+            lokasi : 'Jl.Matahari',
             status : "terkirim"
         },
     ])

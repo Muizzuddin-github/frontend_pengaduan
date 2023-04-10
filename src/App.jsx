@@ -1,6 +1,5 @@
 import Login from "./Components/Login/Login"
 import Daftar from "./Components/Daftar/Daftar"
-import SideBarMenu from "./Components/Menu/Dashboard"
 
 function App() {
   return (
