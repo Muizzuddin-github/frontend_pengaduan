@@ -7,7 +7,7 @@ const KomentarUser = (props) => {
     }
 
     return ( 
-        <div className="w-72 bg-white px-2 py-3 hover:scale-[1.03] transition duration-150 rounded-t-md rounded-br-md shadow-km m-3 flex flex-col">
+        <div className="w-72 bg-white px-2 py-3 hover:scale-[1.03] transition duration-150 rounded-t-md rounded-br-md shadow-km m-3 flex flex-col break-words">
             <h2 className="text-sm text-gray-600">Anda</h2>
             <hr className="mt-2" />
             <div className="mt-3 text-sm px-1">
