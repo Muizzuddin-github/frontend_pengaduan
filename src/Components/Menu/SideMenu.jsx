@@ -12,14 +12,13 @@ const SideMenu = (props) => {
         ])
     }
     const showCardproses = () =>{
-        const btn = document.querySelector(".btn-cards")
-        btn.classList.add("hidden")
         props.setPengaduan([
             {
                 id : 1,
                 nama : 'tito',
                 kendala : 'banjir',
-                lokasi : 'jl.bunga'
+                lokasi : 'jl.bunga',
+                status : "diproses"
             },
         ])
     }

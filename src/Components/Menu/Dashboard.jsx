@@ -9,25 +9,29 @@ const Dashboard = (props) => {
             id : 1,
             nama : "Agus",
             kendala : 'banjir',
-            lokasi : 'Jl.ahshshs'
+            lokasi : 'Jl.ahshshs',
+            status : "terkirim"
         },
         {
             id : 2,
             nama : "Budi",
             kendala : 'tsunami',
-            lokasi : 'Jl.ahshshs'
+            lokasi : 'Jl.ahshshs',
+            status : "terkrim"
         },
         {
             id : 3,
             nama : "Bambang",
             kendala : 'skill issue',
-            lokasi : 'Jl.ahshshs'
+            lokasi : 'Jl.ahshshs',
+            status : "terkirim"
         },
         {
             id : 4,
             nama : "Siti",
             kendala : 'banjir',
-            lokasi : 'Jl.ahshshs'
+            lokasi : 'Jl.ahshshs',
+            status : "terkirim"
         },
     ])
     return (
