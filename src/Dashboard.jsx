@@ -3,7 +3,7 @@ import SideMenu from "./Components/Menu/SideMenu";
 import Navigasi from "./Components/Menu/Navigasi";
 import { useState } from "react";
 const Dashboard = (props) => {
-    const [id,setID] = useState(0)
+    const [id] = useState(0)
     const [pengaduan, setPengaduan] = useState([
         {
             id : 1,
