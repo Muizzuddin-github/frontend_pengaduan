@@ -1,39 +1,19 @@
 import CardsPengaduan from "./CardsPengaduan";
 import SideMenu from "./Components/Menu/SideMenu";
 import Navigasi from "./Components/Menu/Navigasi";
+import { useEffect } from "react";
+
 import { useState } from "react";
+import axios from "axios";
 const Dashboard = (props) => {
     const [id] = useState(0)
-    const [pengaduan, setPengaduan] = useState([
-        {
-            id : 1,
-            nama : "Agus",
-            kendala : 'banjir',
-            lokasi : 'Jl.Matahari',
-            status : "terkirim"
-        },
-        {
-            id : 2,
-            nama : "Budi",
-            kendala : 'tsunami',
-            lokasi : 'Jl.Matahari',
-            status : "terkirim"
-        },
-        {
-            id : 3,
-            nama : "Bambang",
-            kendala : 'skill issue',
-            lokasi : 'Jl.Matahari',
-            status : "terkirim"
-        },
-        {
-            id : 4,
-            nama : "Siti",
-            kendala : 'banjir',
-            lokasi : 'Jl.Matahari',
-            status : "terkirim"
-        },
-    ])
+    const [pengaduan, setPengaduan] = useState([])
+
+    useEffect(function(){
+        axios.get("http://localhost:8080/pengaduan").then(({data}) => {
+            setPengaduan(data.data)
+        })
+    },[])
     return (
         <div className="bg-slate-300">
             <div>

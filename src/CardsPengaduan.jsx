@@ -10,7 +10,8 @@ const CardsPengaduan = (props) => {
                 id={q.id}
                 nama={q.nama}
                 status={q.status}
-                kendala={q.kendala}
+                kendala={q.deskripsi}
+                foto={q.foto}
                 lokasi={q.lokasi}
                 />
             ))

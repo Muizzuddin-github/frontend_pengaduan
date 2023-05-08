@@ -7,7 +7,7 @@ const Cards = (props) => {
             <div className="w-[60%] mx-auto shadow-lg">
                 <div className="relative m-0 flex bg-white p-4 rounded-md">
                     <div className="flex-no-shrink">
-                        <img alt className="w-[400px] h-64 block mx-auto" src="../../../public/www.jpg" />
+                        <img className="w-[400px] h-64 block mx-auto" src={props.foto} alt={""} />   
                     </div>
                     <div className="flex-1 card-block relative">
                         <div className="p-6">

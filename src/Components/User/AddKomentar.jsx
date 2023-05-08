@@ -1,10 +1,11 @@
 import { useState } from "react"
+import axios from "axios"
 
 const AddKomentar = (props) => {
     const [kritik,setKritik] = useState("")
     const [saran,setSaran] = useState("")
 
-    const submit = (e) => {
+    const submit = async (e) => {
         e.preventDefault()
         const lastKomentar = props.komentar[props.komentar.length - 1]
         const newKomentar = {
@@ -13,6 +14,12 @@ const AddKomentar = (props) => {
             saran : saran
         }
         props.setKomentar([...props.komentar,newKomentar])
+
+        await axios.post("http://localhost:8080/krisar",{
+            kritik : kritik,
+            saran : saran,
+            fk_user : 1
+        })
 
         const formKomentar = e.target
         const addForm = formKomentar.parentElement.parentElement

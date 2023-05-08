@@ -2,44 +2,18 @@ import Komentar from "./Components/komentar/Komentar";
 import { useState } from "react";
 import DetilKomentar from "./Components/komentar/DetilKomentar";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
 
 const Kisar = () => {
     const [kritik,setKritik] = useState({})
     const redirect = useNavigate()
-    const [komentar,setKomentar] = useState([
-        {
-            id : 1,
-            kritik : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam, perferendis minima. Nesciunt quasi labore itaque tenetur tempore reiciendis, numquam accusamus provident iure consequatur quis. Corporis blanditiis harum doloribus unde optio.",
-            saran : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam, perferendis minima. Nesciunt quasi labore itaque tenetur tempore reiciendis, numquam accusamus provident iure consequatur quis. Corporis blanditiis harum doloribus unde optio.",
-            username : "tito"
-        },
-        {
-            id : 2,
-            kritik : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam, perferendis minima. Nesciunt quasi labore itaque tenetur tempore reiciendis, numquam accusamus provident iure consequatur quis. Corporis blanditiis harum doloribus unde optio.",
-            saran : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam, perferendis minima. Nesciunt quasi labore itaque tenetur tempore reiciendis, numquam accusamus provident iure consequatur quis. Corporis blanditiis harum doloribus unde optio.",
-            username : "ilhan"
-        },
-        {
-            id : 3,
-            kritik : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam, perferendis minima. Nesciunt quasi labore itaque tenetur tempore reiciendis, numquam accusamus provident iure consequatur quis. Corporis blanditiis harum doloribus unde optio.",
-            saran : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam, perferendis minima. Nesciunt quasi labore itaque tenetur tempore reiciendis, numquam accusamus provident iure consequatur quis. Corporis blanditiis harum doloribus unde optio.",
-            username : "romi"
-        },
-        {
-            id : 4,
-            kritik : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam, perferendis minima. Nesciunt quasi labore itaque tenetur tempore reiciendis, numquam accusamus provident iure consequatur quis. Corporis blanditiis harum doloribus unde optio.",
-            saran : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam, perferendis minima. Nesciunt quasi labore itaque tenetur tempore reiciendis, numquam accusamus provident iure consequatur quis. Corporis blanditiis harum doloribus unde optio.",
-            username : "muiz"
-        },
-        {
-            id : 5,
-            kritik : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam, perferendis minima. Nesciunt quasi labore itaque tenetur tempore reiciendis, numquam accusamus provident iure consequatur quis. Corporis blanditiis harum doloribus unde optio.",
-            saran : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam, perferendis minima. Nesciunt quasi labore itaque tenetur tempore reiciendis, numquam accusamus provident iure consequatur quis. Corporis blanditiis harum doloribus unde optio.",
-            username : "gilang"
-        },
-
-    ])
-
+    const [komentar,setKomentar] = useState([])
+    useEffect(function(){
+        axios.get("http://localhost:8080/krisar").then(({data}) => {
+            setKomentar(data.data)
+        })
+    },[])
     return ( 
         <div className="kisar">
             <DetilKomentar data={kritik} />

@@ -7,7 +7,8 @@ import Dashboard from './Dashboard'
 import Kisar from './Kisar'
 import KisarUser from './KisarUser'
 import Daftar from './Components/Daftar/Daftar'
-
+import axios from 'axios'
+axios.defaults.withCredentials = true
 
 const router = createBrowserRouter([
   {
