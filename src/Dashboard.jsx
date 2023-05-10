@@ -6,6 +6,7 @@ import { RootContext } from "./Components/GlobalState";
 
 import { useState } from "react";
 import axios from "axios";
+import KatPengaduan from "./ListKategori";
 const Dashboard = (props) => {
   const [id] = useState(0);
   const [pengaduan, setPengaduan] = useState([]);
@@ -36,7 +37,7 @@ const Dashboard = (props) => {
   );
 
   return (
-    <div className="bg-slate-300">
+    <div className="dash-admin bg-slate-300">
       <div>
         <div className="text-right">
           <Navigasi />

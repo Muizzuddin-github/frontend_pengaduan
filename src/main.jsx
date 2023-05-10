@@ -10,6 +10,7 @@ import Daftar from "./Components/Daftar/Daftar";
 import PrivateRoute from "./Components/PrivateRoute";
 import GlobalState from "./Components/GlobalState";
 import axios from "axios";
+import ListPengaduan from "./ListKategori";
 axios.defaults.withCredentials = true;
 
 const router = createBrowserRouter([
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
   {
     path: "/admin/kritik-saran",
     element: <Kisar />,
+  },
+  {
+    path: "/admin/list-kategori",
+    element: <ListPengaduan />,
   },
 ]);
 
