@@ -6,7 +6,7 @@ import { RootContext } from "./Components/GlobalState";
 
 import { useState } from "react";
 import axios from "axios";
-import KatPengaduan from "./ListKategori";
+import { redirect } from "react-router-dom";
 const Dashboard = (props) => {
   const [id] = useState(0);
   const [pengaduan, setPengaduan] = useState([]);
@@ -28,8 +28,11 @@ const Dashboard = (props) => {
           axios
             .get("http://localhost:8080/users/refresh-access-token")
             .then(({ data }) => {
-              console.log(data);
               setAccessToken(data.accessToken);
+            })
+            .catch((err) => {
+              console.log(err);
+              redirect("/login");
             });
         });
     },
