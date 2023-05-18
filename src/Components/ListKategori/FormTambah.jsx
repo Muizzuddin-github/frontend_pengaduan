@@ -1,28 +1,78 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { RootContext } from "../GlobalState";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const FormTambah = () => {
+const FormTambah = (props) => {
   const [image, setImage] = useState(null);
   const [judul, setJudul] = useState("");
   const [deskripsi, setDeskripsi] = useState("");
+  const [uploadFoto, setUploadFoto] = useState(null);
+  const redirect = useNavigate();
+
+  const { accessToken, setAccessToken } = useContext(RootContext);
 
   const handleUpload = async (e) => {
-    e.preventDefault();
-    alert(`Berhasil Upload ${judul} ${deskripsi}`);
+    try {
+      e.preventDefault();
+      const data = new FormData();
+      data.append("nama", judul);
+      data.append("deskripsi", deskripsi);
+      data.append("foto", uploadFoto);
+
+      await axios.post("http://localhost:8080/admin/kategori-pengaduan", data, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const result = await axios.get(
+        "http://localhost:8080/users/kategori-pengaduan",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      alert("berhasil menambah kategori");
+      props.setKategori(result.data.data);
+      const close = document.querySelector(".tambah-kategori");
+      close.classList.add("hidden");
+      e.target.reset();
+      setImage(null);
+    } catch (err) {
+      if (err.response.status === 401) {
+        try {
+          const { data } = await axios.get(
+            "http://localhost:8080/users/refresh-access-token"
+          );
+          const result = await axios.get(
+            "http://localhost:8080/users/kategori-pengaduan",
+            {
+              headers: {
+                Authorization: `Bearer ${data.accessToken}`,
+              },
+            }
+          );
+          setAccessToken(data.accessToken);
+          props.setKategori(result.data.data);
+        } catch (err) {
+          redirect("/login");
+        }
+      }
+    }
   };
 
   const handleImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       setImage(URL.createObjectURL(event.target.files[0]));
+      setUploadFoto(event.target.files[0]);
     }
   };
 
   const hideForm = () => {
     const close = document.querySelector(".tambah-kategori");
     close.classList.add("hidden");
-  };
-
-  const submit = () => {
-    alert("oke");
   };
 
   return (
@@ -41,7 +91,12 @@ const FormTambah = () => {
               Tambah Kategori Baru
             </h2>
           </div>
-          <form onSubmit={handleUpload} className="mt-8 space-y-3" action="#" method="POST">
+          <form
+            onSubmit={handleUpload}
+            className="mt-8 space-y-3"
+            action="#"
+            method="POST"
+          >
             <div className="grid grid-cols-1 space-y-2">
               <label className="text-sm font-bold text-gray-500 tracking-wide">
                 Judul
@@ -52,6 +107,7 @@ const FormTambah = () => {
                 placeholder="Judul Kategori"
                 name="judul"
                 id="judul"
+                required
                 onChange={(event) => setJudul(event.target.value)}
               />
             </div>
@@ -62,6 +118,7 @@ const FormTambah = () => {
               <input
                 className="text-base p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
                 type="text"
+                required
                 placeholder="Deskripsi Kategori"
                 name="deskripsi"
                 id="deskripsi"
@@ -87,7 +144,7 @@ const FormTambah = () => {
                     <p className="pointer-none text-gray-500 ">
                       <span className="text-sm">Drag and drop</span> files here{" "}
                       <br /> or{" "}
-                      <a href id className="text-blue-600 hover:underline">
+                      <a className="text-blue-600 hover:underline">
                         select a file
                       </a>{" "}
                       from your computer
@@ -97,6 +154,7 @@ const FormTambah = () => {
                     type="file"
                     className="hidden"
                     accept=".jpg, .png, .jpeg"
+                    required
                     onChange={handleImageChange}
                   />
                 </label>

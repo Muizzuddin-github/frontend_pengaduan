@@ -5,13 +5,20 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useContext } from "react";
 import { RootContext } from "./Components/GlobalState";
+import ConfirmHapus from "./Components/ListKategori/ConfirmHapus";
+import { useNavigate } from "react-router-dom";
+import FormEdit from "./Components/ListKategori/FormEdit";
 
 const ListKategori = () => {
+  const redirect = useNavigate();
   const showForm = () => {
     const tampil = document.querySelector(".tambah-kategori");
     tampil.classList.remove("hidden");
     tampil.classList.add("flex");
   };
+
+  const [idKategori, setIdKategori] = useState(0);
+  const [detilKategori,setDetilKategori] = useState({})
 
   const [kategori, setKategori] = useState([
     {
@@ -45,7 +52,6 @@ const ListKategori = () => {
           },
         })
         .then(({ data }) => {
-          console.log(data);
           setKategori(data.data);
         })
         .catch((err) => {
@@ -79,16 +85,21 @@ const ListKategori = () => {
           {kategori.map((x, i) => (
             <CardsKategori
               key={i}
+              idKategori={x.id}
               judul={x.nama}
               deskripsi={x.deskripsi}
               urlFoto={x.foto}
+              setIdKategori={setIdKategori}
+              setDetilKategori={setDetilKategori}
             />
           ))}
         </div>
         <div className="tambah">
-          <FormTambah />
+          <FormTambah setKategori={setKategori} />
         </div>
+        <FormEdit detilKategori={detilKategori} idKategori={idKategori} setKategori={setKategori} />
       </div>
+      <ConfirmHapus idKategoriHapus={idKategori} setKategori={setKategori} />
     </>
   );
 };

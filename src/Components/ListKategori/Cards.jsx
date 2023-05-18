@@ -1,15 +1,18 @@
-import DeleteConfirm from "./DeleteConfirm";
-import FormEdit from "./FormEdit";
 const CardsKategori = (props) => {
   const showUbahForm = () => {
     const tampil = document.querySelector(".edit-kategori");
     tampil.classList.remove("hidden");
     tampil.classList.add("flex");
+    props.setIdKategori(props.idKategori);
+    props.setDetilKategori({
+      nama : props.judul,
+      deskripsi : props.deskripsi
+    })
   };
-
   const showConfirm = () => {
     const tampil = document.querySelector(".hapus-kategori");
     tampil.classList.remove("hidden");
+    props.setIdKategori(props.idKategori);
   };
   return (
     <>
@@ -41,10 +44,6 @@ const CardsKategori = (props) => {
             </button>
           </div>
         </div>
-      </div>
-      <div>
-        <FormEdit/>
-        <DeleteConfirm />
       </div>
     </>
   );
