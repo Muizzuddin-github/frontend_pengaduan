@@ -11,6 +11,7 @@ import PrivateRoute from "./Components/PrivateRoute";
 import GlobalState from "./Components/GlobalState";
 import axios from "axios";
 import ListPengaduan from "./ListKategori";
+import Penanganan from "./Penanganan";
 axios.defaults.withCredentials = true;
 
 const router = createBrowserRouter([
@@ -45,6 +46,14 @@ const router = createBrowserRouter([
   {
     path: "/admin/list-kategori",
     element: <ListPengaduan />,
+  },
+  {
+    path: "/admin/list-kategori/:id",
+    element: (
+      <PrivateRoute>
+        <Penanganan />
+      </PrivateRoute>
+    ),
   },
 ]);
 

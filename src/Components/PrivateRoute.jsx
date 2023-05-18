@@ -11,7 +11,6 @@ const PrivateRoute = ({ children }) => {
       .get("http://localhost:8080/users/islogin")
       .then(({ data }) => {
         setIsLogin(true);
-        console.log("sdi");
       })
       .catch((err) => {
         redirect("/login");
