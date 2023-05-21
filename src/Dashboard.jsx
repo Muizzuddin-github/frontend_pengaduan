@@ -15,7 +15,7 @@ const Dashboard = (props) => {
   useEffect(
     function () {
       axios
-        .get("http://localhost:8080/admin/pengaduan", {
+        .get("http://localhost:8080/admin/pengaduan/terkirim", {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -31,7 +31,6 @@ const Dashboard = (props) => {
               setAccessToken(data.accessToken);
             })
             .catch((err) => {
-              console.log(err);
               redirect("/login");
             });
         });

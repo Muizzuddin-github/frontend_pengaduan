@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Outlet } from "react-router-dom";
 
-const PrivateRoute = ({ children }) => {
+const PrivateRouteAdmin = () => {
   const [isLogin, setIsLogin] = useState(false);
   const redirect = useNavigate();
 
@@ -10,6 +11,10 @@ const PrivateRoute = ({ children }) => {
     axios
       .get("http://localhost:8080/users/islogin")
       .then(({ data }) => {
+        const isAdmin = data.data[0].role;
+        if (isAdmin != "Admin") {
+          redirect("/dashboard");
+        }
         setIsLogin(true);
       })
       .catch((err) => {
@@ -17,7 +22,7 @@ const PrivateRoute = ({ children }) => {
       });
   }, []);
 
-  return isLogin ? children : "";
+  return isLogin ? <Outlet /> : "";
 };
 
-export default PrivateRoute;
+export default PrivateRouteAdmin;
