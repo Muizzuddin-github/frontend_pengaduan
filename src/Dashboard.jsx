@@ -1,4 +1,4 @@
-import CardsPengaduan from "./CardsPengaduan";
+import CardsPengaduan from "./Components/Pelayanan/CardsPengaduan";
 import SideMenu from "./Components/Menu/SideMenu";
 import Navigasi from "./Components/Menu/Navigasi";
 import { useEffect, useContext } from "react";
@@ -21,7 +21,6 @@ const Dashboard = (props) => {
           },
         })
         .then(({ data }) => {
-          console.log(data);
           setPengaduan(data.data);
         })
         .catch((err) => {
@@ -38,6 +37,40 @@ const Dashboard = (props) => {
     [accessToken]
   );
 
+  const getProses = async () => {
+    let token = "";
+    try {
+      const dataProses = await axios.get(
+        "http://localhost:8080/admin/pengaduan/diproses",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(dataProses.data.data);
+      setPengaduan(dataProses.data.data);
+    } catch (err) {
+      try {
+        const { data } = await axios.get(
+          "http://localhost:8080/users/refresh-access-token"
+        );
+        token = data.accessToken;
+        const dataProses = await axios.get(
+          "http://localhost:8080/admin/pengaduan/diproses",
+          {
+            headers: {
+              Authorization: `Bearer ${data.accessToken}`,
+            },
+          }
+        );
+        setPengaduan(dataProses.data.data);
+      } catch (err) {
+        redirect("/login");
+      }
+    }
+  };
+
   return (
     <div className="dash-admin bg-slate-300">
       <div>
@@ -45,7 +78,7 @@ const Dashboard = (props) => {
           <Navigasi />
         </div>
         <div>
-          <SideMenu setPengaduan={setPengaduan} />
+          <SideMenu getProses={getProses} />
         </div>
       </div>
       <div className="isiNya">

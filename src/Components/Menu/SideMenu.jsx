@@ -1,9 +1,11 @@
 import IsiMenu from "./IsiMenu";
+import axios from "axios";
+
 const SideMenu = (props) => {
-    const hideMenu = () => {
-        const hideSideMenu = document.querySelector('.aside-bar')
-        hideSideMenu.classList.add('-translate-x-full')
-    }
+  const hideMenu = () => {
+    const hideSideMenu = document.querySelector(".aside-bar");
+    hideSideMenu.classList.add("-translate-x-full");
+  };
 
   const showCardMasuk = () => {
     const btn = document.querySelector(".btn-cards");
@@ -84,7 +86,7 @@ const SideMenu = (props) => {
           Menu
         </h5>
         <button
-        onClick={hideMenu}
+          onClick={hideMenu}
           type="button"
           className="hide-side-menu text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
         >
@@ -118,7 +120,7 @@ const SideMenu = (props) => {
             <li>
               <a
                 href="#"
-                onClick={showCardproses}
+                onClick={props.getProses}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <ion-icon name="refresh-circle" size="large"></ion-icon>

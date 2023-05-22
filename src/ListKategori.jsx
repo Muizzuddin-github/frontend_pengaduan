@@ -18,28 +18,9 @@ const ListKategori = () => {
   };
 
   const [idKategori, setIdKategori] = useState(0);
-  const [detilKategori,setDetilKategori] = useState({})
+  const [detilKategori, setDetilKategori] = useState({});
 
-  const [kategori, setKategori] = useState([
-    {
-      judul: "Banjir",
-      deskripsi: "Laporkan Banjir",
-      urlFoto:
-        "https://img.freepik.com/free-vector/character-illustration-home-improvement-concept_53876-43040.jpg?w=1060&t=st=1684065546~exp=1684066146~hmac=1a84a5cbc765e5d84a54b477221e18c07c7536515a078c1e2b9bed14640e7f56",
-    },
-    {
-      judul: "Pohon Tumbang",
-      deskripsi: "Laporkan Pohon Tumbang",
-      urlFoto:
-        "https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg",
-    },
-    {
-      judul: "Lampu Jalan Mati",
-      deskripsi: "Laporkan Lampu Jalan Mati",
-      urlFoto:
-        "https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg",
-    },
-  ]);
+  const [kategori, setKategori] = useState([]);
 
   const { accessToken, setAccessToken } = useContext(RootContext);
 
@@ -97,7 +78,11 @@ const ListKategori = () => {
         <div className="tambah">
           <FormTambah setKategori={setKategori} />
         </div>
-        <FormEdit detilKategori={detilKategori} idKategori={idKategori} setKategori={setKategori} />
+        <FormEdit
+          detilKategori={detilKategori}
+          idKategori={idKategori}
+          setKategori={setKategori}
+        />
       </div>
       <ConfirmHapus idKategoriHapus={idKategori} setKategori={setKategori} />
     </>
