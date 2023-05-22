@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import { RootContext } from "../GlobalState";
 
 const ConfirmHapus = (props) => {
@@ -30,25 +29,25 @@ const ConfirmHapus = (props) => {
       const close = document.querySelector(".hapus-kategori");
       close.classList.add("hidden");
     } catch (err) {
-        if (err.response.status === 401) {
-          try {
-            const { data } = await axios.get(
-              "http://localhost:8080/users/refresh-access-token"
-            );
-            const result = await axios.get(
-              "http://localhost:8080/users/kategori-pengaduan",
-              {
-                headers: {
-                  Authorization: `Bearer ${data.accessToken}`,
-                },
-              }
-            );
-            setAccessToken(data.accessToken);
-            props.setKategori(result.data.data);
-          } catch (err) {
-            redirect("/login");
-          }
+      if (err.response.status === 401) {
+        try {
+          const { data } = await axios.get(
+            "http://localhost:8080/users/refresh-access-token"
+          );
+          const result = await axios.get(
+            "http://localhost:8080/users/kategori-pengaduan",
+            {
+              headers: {
+                Authorization: `Bearer ${data.accessToken}`,
+              },
+            }
+          );
+          setAccessToken(data.accessToken);
+          props.setKategori(result.data.data);
+        } catch (err) {
+          redirect("/login");
         }
+      }
       console.log(err);
     }
   };

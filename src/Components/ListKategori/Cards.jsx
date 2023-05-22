@@ -5,9 +5,9 @@ const CardsKategori = (props) => {
     tampil.classList.add("flex");
     props.setIdKategori(props.idKategori);
     props.setDetilKategori({
-      nama : props.judul,
-      deskripsi : props.deskripsi
-    })
+      nama: props.judul,
+      deskripsi: props.deskripsi,
+    });
   };
   const showConfirm = () => {
     const tampil = document.querySelector(".hapus-kategori");

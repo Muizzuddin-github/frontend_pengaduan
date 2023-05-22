@@ -1,6 +1,61 @@
+import { useState, useEffect } from "react";
 import DetailPel from "./DetailPel";
 import PopUpKonfir from "./PopUpKonfir";
-const Cards = (props) => {
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+const Cards = ({ data, setPengaduan, setToken, token }) => {
+  const [id, setId] = useState(0);
+  const redirect = useNavigate();
+
+  useEffect(
+    function () {
+      setId(data.id);
+    },
+    [data]
+  );
+
+  const handleTerima = async () => {
+    try {
+      await axios.patch(
+        `http://localhost:8080/admin/pengaduan/${id}`,
+        {
+          status: "diproses",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setPengaduan((prev) => prev.filter((v) => v.id != id));
+    } catch (err) {
+      try {
+        const { data } = await axios.get(
+          "http://localhost:8080/users/refresh-access-token"
+        );
+
+        await axios.patch(
+          `http://localhost:8080/admin/pengaduan/${id}`,
+          {
+            status: "diproses",
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setToken(data.accessToken);
+        setPengaduan(dataProses.data.data);
+      } catch (err) {
+        redirect("/login");
+      }
+    }
+  };
+
   return (
     <div className="p-6">
       <div className="w-[60%] mx-auto shadow-lg">
@@ -8,21 +63,24 @@ const Cards = (props) => {
           <div className="flex-no-shrink">
             <img
               className="w-[400px] h-64 block mx-auto"
-              src={props.foto}
+              src={data.foto}
               alt={""}
             />
           </div>
           <div className="flex-1 card-block relative">
             <div className="p-6">
               <DetailPel
-                username={props.username}
-                deskripsi={props.deskripsi}
-                lokasi={props.lokasi}
-                tanggal={props.tanggal}
+                username={data.username}
+                deskripsi={data.deskripsi}
+                lokasi={data.lokasi}
+                tanggal={data.tanggal}
               />
               <div className="flex mt-14 btn-cards">
-                {props.status == "terkirim" ? (
-                  <button className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                {data.status == "terkirim" ? (
+                  <button
+                    onClick={handleTerima}
+                    className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                  >
                     Terima
                   </button>
                 ) : (

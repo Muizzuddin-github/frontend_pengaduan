@@ -1,69 +1,61 @@
-import CardsPengaduan from "./Components/Pelayanan/CardsPengaduan";
+import Cards from "./Components/Pelayanan/Cards";
 import SideMenu from "./Components/Menu/SideMenu";
 import Navigasi from "./Components/Menu/Navigasi";
-import { useEffect, useContext } from "react";
-import { RootContext } from "./Components/GlobalState";
-
+import { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
-import { redirect } from "react-router-dom";
-const Dashboard = (props) => {
-  const [id] = useState(0);
+import { useNavigate } from "react-router-dom";
+
+const Dashboard = () => {
   const [pengaduan, setPengaduan] = useState([]);
-  const { accessToken, setAccessToken } = useContext(RootContext);
+  const [token, setToken] = useState("");
+  const redirect = useNavigate();
 
-  useEffect(
-    function () {
-      axios
-        .get("http://localhost:8080/admin/pengaduan/terkirim", {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        .then(({ data }) => {
-          setPengaduan(data.data);
-        })
-        .catch((err) => {
-          axios
-            .get("http://localhost:8080/users/refresh-access-token")
-            .then(({ data }) => {
-              setAccessToken(data.accessToken);
-            })
-            .catch((err) => {
-              redirect("/login");
-            });
-        });
-    },
-    [accessToken]
-  );
+  useEffect(function () {
+    axios
+      .get("http://localhost:8080/users/refresh-access-token")
+      .then(({ data }) => {
+        setToken(data.accessToken);
+        axios
+          .get("http://localhost:8080/admin/pengaduan/terkirim", {
+            headers: {
+              Authorization: `Bearer ${data.accessToken}`,
+            },
+          })
+          .then(({ data }) => setPengaduan(data.data));
+      })
+      .catch((err) => {
+        redirect("/login");
+      });
+  }, []);
 
-  const getProses = async () => {
-    let token = "";
+  const getPengaduan = async (status) => {
     try {
       const dataProses = await axios.get(
-        "http://localhost:8080/admin/pengaduan/diproses",
+        `http://localhost:8080/admin/pengaduan/${status}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      console.log(dataProses.data.data);
       setPengaduan(dataProses.data.data);
     } catch (err) {
       try {
         const { data } = await axios.get(
           "http://localhost:8080/users/refresh-access-token"
         );
-        token = data.accessToken;
+
         const dataProses = await axios.get(
-          "http://localhost:8080/admin/pengaduan/diproses",
+          `http://localhost:8080/admin/pengaduan/${status}`,
           {
             headers: {
               Authorization: `Bearer ${data.accessToken}`,
             },
           }
         );
+
+        setToken(data.accessToken);
         setPengaduan(dataProses.data.data);
       } catch (err) {
         redirect("/login");
@@ -78,12 +70,20 @@ const Dashboard = (props) => {
           <Navigasi />
         </div>
         <div>
-          <SideMenu getProses={getProses} />
+          <SideMenu getPengaduan={getPengaduan} />
         </div>
       </div>
       <div className="isiNya">
         <div className="card-masuk">
-          <CardsPengaduan pengaduan={pengaduan} />
+          {pengaduan.map((q, k) => (
+            <Cards
+              key={k}
+              data={q}
+              token={token}
+              setToken={setToken}
+              setPengaduan={setPengaduan}
+            />
+          ))}
         </div>
       </div>
     </div>

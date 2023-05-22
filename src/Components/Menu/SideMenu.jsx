@@ -110,7 +110,7 @@ const SideMenu = (props) => {
             <li>
               <a
                 href="#"
-                onClick={showCardMasuk}
+                onClick={() => props.getPengaduan("terkirim")}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <ion-icon name="archive" size="large"></ion-icon>
@@ -120,7 +120,7 @@ const SideMenu = (props) => {
             <li>
               <a
                 href="#"
-                onClick={props.getProses}
+                onClick={() => props.getPengaduan("diproses")}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <ion-icon name="refresh-circle" size="large"></ion-icon>
@@ -130,7 +130,7 @@ const SideMenu = (props) => {
             <li>
               <a
                 href="#"
-                onClick={showCardSelesai}
+                onClick={() => props.getPengaduan("selesai")}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <ion-icon name="checkmark-done-circle" size="large"></ion-icon>
@@ -140,7 +140,7 @@ const SideMenu = (props) => {
             <li>
               <a
                 href="#"
-                onClick={showCardDitolak}
+                onClick={() => props.getPengaduan("ditolak")}
                 className=" flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <ion-icon name="close-circle" size="large"></ion-icon>
