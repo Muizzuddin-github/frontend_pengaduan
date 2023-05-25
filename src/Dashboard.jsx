@@ -5,11 +5,13 @@ import { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import PopUpKonfir from "./Components/Pelayanan/PopUpKonfir";
 
 const Dashboard = () => {
   const [pengaduan, setPengaduan] = useState([]);
   const [token, setToken] = useState("");
   const redirect = useNavigate();
+  const [id, setId] = useState(0);
 
   useEffect(function () {
     axios
@@ -63,6 +65,10 @@ const Dashboard = () => {
     }
   };
 
+  const ubahId = (id) => {
+    setId(id);
+  };
+
   return (
     <div className="dash-admin bg-slate-300">
       <div>
@@ -82,10 +88,12 @@ const Dashboard = () => {
               token={token}
               setToken={setToken}
               setPengaduan={setPengaduan}
+              ubahId={ubahId}
             />
           ))}
         </div>
       </div>
+      <PopUpKonfir id={id} />
     </div>
   );
 };

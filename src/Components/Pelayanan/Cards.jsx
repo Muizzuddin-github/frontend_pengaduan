@@ -1,24 +1,13 @@
 import { useState, useEffect } from "react";
 import DetailPel from "./DetailPel";
-import PopUpKonfir from "./PopUpKonfir";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Cards = ({ data, setPengaduan, setToken, token }) => {
-  const [id, setId] = useState(0);
-  const redirect = useNavigate();
-
-  useEffect(
-    function () {
-      setId(data.id);
-    },
-    [data]
-  );
-
+const Cards = ({ data, setPengaduan, setToken, token, ubahId }) => {
   const handleTerima = async () => {
     try {
       await axios.patch(
-        `http://localhost:8080/admin/pengaduan/${id}`,
+        `http://localhost:8080/admin/pengaduan/${data.id}`,
         {
           status: "diproses",
         },
@@ -29,7 +18,7 @@ const Cards = ({ data, setPengaduan, setToken, token }) => {
         }
       );
 
-      setPengaduan((prev) => prev.filter((v) => v.id != id));
+      setPengaduan((prev) => prev.filter((v) => v.id != data.id));
     } catch (err) {
       try {
         const { data } = await axios.get(
@@ -37,7 +26,7 @@ const Cards = ({ data, setPengaduan, setToken, token }) => {
         );
 
         await axios.patch(
-          `http://localhost:8080/admin/pengaduan/${id}`,
+          `http://localhost:8080/admin/pengaduan/${data.id}`,
           {
             status: "diproses",
           },
@@ -54,6 +43,13 @@ const Cards = ({ data, setPengaduan, setToken, token }) => {
         redirect("/login");
       }
     }
+  };
+
+  const konfirmTolak = () => {
+    ubahId(data.id);
+
+    const tolak = document.querySelector(".popup-tolak");
+    tolak.classList.remove("hidden");
   };
 
   return (
@@ -95,8 +91,7 @@ const Cards = ({ data, setPengaduan, setToken, token }) => {
 
                 <button
                   className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                  data-modal-target="popup-modal"
-                  data-modal-toggle="popup-modal"
+                  onClick={konfirmTolak}
                 >
                   Tolak
                 </button>
@@ -105,7 +100,6 @@ const Cards = ({ data, setPengaduan, setToken, token }) => {
           </div>
         </div>
       </div>
-      <PopUpKonfir />
     </div>
   );
 };

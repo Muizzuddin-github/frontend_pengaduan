@@ -17,7 +17,7 @@ function App() {
       <Route path="/admin" element={<PrivateRouteAdmin />}>
         <Route path="" element={<Dashboard />} />
         <Route path="list-kategori" element={<ListKategori />} />
-        <Route path="list-kategori/:id" element={<Penanganan />} />
+        <Route path="pengaduan/:id" element={<Penanganan />} />
         <Route path="kritik-saran" element={<Kisar />} />
       </Route>
       <Route path="*" element={<h1>halaman tidak ditemukan</h1>} />
