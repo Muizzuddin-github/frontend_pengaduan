@@ -1,12 +1,39 @@
 import Navigasi from "./Components/Menu/Navigasi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import SinglePengaduan from "./Components/Penanganan/SinglePengaduan";
+import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
 
 const Penanganan = () => {
   const [img, setImg] = useState(null);
-  const [jenisPengaduan, setJenisPengaduan] = useState("setuju");
+  const [jenisPengaduan, setJenisPengaduan] = useState("selesai");
   const [imgUpload, setImgUpload] = useState(null);
   const [deskripsi, setDeskripsi] = useState("");
   const [errNotUploadImg, setErrNotUploadImg] = useState(false);
+  const [token, setToken] = useState("");
+  const redirect = useNavigate();
+
+  // single pengaduan
+  const [singlePengaduan, setSinglePengaduan] = useState({});
+  const { id } = useParams();
+
+  useEffect(function () {
+    axios
+      .get("http://localhost:8080/users/refresh-access-token")
+      .then(({ data }) => {
+        setToken(data.accessToken);
+        axios
+          .get(`http://localhost:8080/admin/pengaduan-single/${id}`, {
+            headers: {
+              Authorization: `Bearer ${data.accessToken}`,
+            },
+          })
+          .then(({ data }) => setSinglePengaduan(data.data[0]));
+      })
+      .catch((err) => {
+        redirect("/login");
+      });
+  }, []);
 
   const handleUpload = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -17,6 +44,11 @@ const Penanganan = () => {
   };
 
   const handlePenanganan = async (e) => {
+    const data = new FormData();
+    data.append("foto_bukti", imgUpload);
+    data.append("deskripsi", deskripsi);
+    data.append("pengaduanID", +id);
+    data.append("status", jenisPengaduan);
     try {
       e.preventDefault();
       if (!imgUpload) {
@@ -24,9 +56,37 @@ const Penanganan = () => {
         return;
       }
 
-      alert(jenisPengaduan + deskripsi);
+      console.log(token);
+
+      await axios.post("http://localhost:8080/admin/penanganan", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      alert("berhasil melakukan penanganan");
+      redirect("/admin");
+      e.target.reset();
     } catch (err) {
       console.log(err);
+      if (err.response.status === 401) {
+        try {
+          const { data } = await axios.get(
+            "http://localhost:8080/users/refresh-access-token"
+          );
+
+          await axios.post("http://localhost:8080/admin/penanganan", data, {
+            headers: {
+              Authorization: `Bearer ${data.token}`,
+            },
+          });
+
+          alert("berhasil melakukan penanganan");
+          redirect("/admin/pengaduan");
+        } catch (err) {
+          redirect("/login");
+        }
+      }
     }
   };
 
@@ -35,32 +95,7 @@ const Penanganan = () => {
       <Navigasi />
 
       <div className="py-10  flex justify-center">
-        <div className="p-8 flex mx-2 border">
-          <figure className="w-56 mr-2">
-            <img
-              className="w-full"
-              src="https://cdn.gramedia.com/uploads/items/9786020523316_Melangkah_UV_Spot_R4-1.jpg"
-              alt=""
-            />
-          </figure>
-          <div className="w-80 h-[25.7rem] flex flex-col ml-2">
-            <div className="p-2">
-              <h1 className="text-xl">Dari : nama user</h1>
-              <p className="text-sm">kategori</p>
-              <p className="text-sm">tanggal</p>
-              <hr className="mt-2 border" />
-            </div>
-            <div className="-mt-2 p-2 h-full">
-              <p className="mb-2">deskripsi</p>
-              <p className="text-sm">
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere
-                nobis corporis provident doloribus officia id voluptatem
-                delectus sequi esse alias. Ducimus omnis tenetur cum quisquam,
-                sunt quis id aperiam possimus, voluptates dignissimos provident
-              </p>
-            </div>
-          </div>
-        </div>
+        <SinglePengaduan singlePengaduan={singlePengaduan} />
 
         <div className="px-4 mx-2">
           <h1 className="font-bold">Tangani pengaduan</h1>
@@ -97,14 +132,14 @@ const Penanganan = () => {
             </div>
             <div className="my-1">
               <div className="text-sm">
-                <label htmlFor="setuju">setuju</label>
+                <label htmlFor="setuju">selesai</label>
                 <input
                   type="radio"
                   id="setuju"
                   name="jenis-penanganan"
                   checked
                   className="ml-2"
-                  onChange={() => setJenisPengaduan("setuju")}
+                  onChange={() => setJenisPengaduan("selesai")}
                 />
               </div>
               <div className="text-sm mt-1">
@@ -114,7 +149,7 @@ const Penanganan = () => {
                   id="tolak"
                   name="jenis-penanganan"
                   className="ml-3.5"
-                  onChange={() => setJenisPengaduan("tolak")}
+                  onChange={() => setJenisPengaduan("ditolak")}
                 />
               </div>
             </div>

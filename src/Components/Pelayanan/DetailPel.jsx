@@ -1,5 +1,5 @@
-import Cards from "./Cards";
 import { useState, useEffect } from "react";
+
 const DetailPel = (props) => {
   const [username, setUsername] = useState("");
   const [kendala, setKendala] = useState("");
@@ -14,7 +14,7 @@ const DetailPel = (props) => {
     const t = new Date(props.tanggal);
     settanggal(
       `${t.getDate()} ${
-        t.getMonth() === 12 ? t.getMonth() : t.getMonth() + 1
+        t.getMonth() < 9 ? "0" + (t.getMonth() + 1) : t.getMonth() + 1
       } ${t.getFullYear()}`
     );
   });
