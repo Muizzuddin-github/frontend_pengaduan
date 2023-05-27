@@ -1,13 +1,10 @@
 import axios from "axios";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { RootContext } from "../GlobalState";
 
 const FormLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const { setAccessToken } = useContext(RootContext);
 
   const redirect = useNavigate();
 
@@ -18,7 +15,6 @@ const FormLogin = () => {
         email: email,
         password: password,
       });
-      setAccessToken(data.accessToken);
       redirect("/admin");
       alert(`Berhasil Login ${email} ${password}`);
     } catch (error) {

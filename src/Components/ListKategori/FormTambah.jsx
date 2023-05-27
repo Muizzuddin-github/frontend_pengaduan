@@ -1,5 +1,4 @@
-import { useState, useContext } from "react";
-import { RootContext } from "../GlobalState";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -10,19 +9,16 @@ const FormTambah = (props) => {
   const [uploadFoto, setUploadFoto] = useState(null);
   const redirect = useNavigate();
 
-  const { accessToken, setAccessToken } = useContext(RootContext);
-
   const handleUpload = async (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append("nama", judul);
+    data.append("deskripsi", deskripsi);
+    data.append("foto", uploadFoto);
     try {
-      e.preventDefault();
-      const data = new FormData();
-      data.append("nama", judul);
-      data.append("deskripsi", deskripsi);
-      data.append("foto", uploadFoto);
-
       await axios.post("http://localhost:8080/admin/kategori-pengaduan", data, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${props.token}`,
         },
       });
 
@@ -30,7 +26,7 @@ const FormTambah = (props) => {
         "http://localhost:8080/users/kategori-pengaduan",
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${props.token}`,
           },
         }
       );
@@ -46,6 +42,17 @@ const FormTambah = (props) => {
           const { data } = await axios.get(
             "http://localhost:8080/users/refresh-access-token"
           );
+
+          await axios.post(
+            "http://localhost:8080/admin/kategori-pengaduan",
+            data,
+            {
+              headers: {
+                Authorization: `Bearer ${data.accessToken}`,
+              },
+            }
+          );
+
           const result = await axios.get(
             "http://localhost:8080/users/kategori-pengaduan",
             {
@@ -54,7 +61,7 @@ const FormTambah = (props) => {
               },
             }
           );
-          setAccessToken(data.accessToken);
+          props.setToken(data.accessToken);
           props.setKategori(result.data.data);
         } catch (err) {
           redirect("/login");

@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
 import DetailPel from "./DetailPel";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
-const Cards = ({ data, setPengaduan, setToken, token, ubahId }) => {
+const Cards = ({ data, setPengaduan, setAccessToken, accessToken, ubahId }) => {
   const handleTerima = async () => {
     try {
       await axios.patch(
@@ -13,7 +11,7 @@ const Cards = ({ data, setPengaduan, setToken, token, ubahId }) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         }
       );
@@ -37,7 +35,7 @@ const Cards = ({ data, setPengaduan, setToken, token, ubahId }) => {
           }
         );
 
-        setToken(data.accessToken);
+        setAccessToken(data.accessToken);
         setPengaduan(dataProses.data.data);
       } catch (err) {
         redirect("/login");

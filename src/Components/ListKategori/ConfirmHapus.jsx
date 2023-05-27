@@ -1,17 +1,13 @@
 import axios from "axios";
-import { useContext } from "react";
-import { RootContext } from "../GlobalState";
 
 const ConfirmHapus = (props) => {
-  const { accessToken, setAccessToken } = useContext(RootContext);
-
   const hapusKategori = async () => {
     try {
       await axios.delete(
         `http://localhost:8080/admin/kategori-pengaduan/${props.idKategoriHapus}`,
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${props.token}`,
           },
         }
       );
@@ -20,7 +16,7 @@ const ConfirmHapus = (props) => {
         "http://localhost:8080/users/kategori-pengaduan",
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${props.token}`,
           },
         }
       );
@@ -42,7 +38,7 @@ const ConfirmHapus = (props) => {
               },
             }
           );
-          setAccessToken(data.accessToken);
+          props.setToken(data.accessToken);
           props.setKategori(result.data.data);
         } catch (err) {
           redirect("/login");

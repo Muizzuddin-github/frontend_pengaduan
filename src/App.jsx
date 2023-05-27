@@ -14,12 +14,38 @@ function App() {
       <Route path="/" element={<h1>hello</h1>} />
       <Route path="/login" element={<Login />} />
       <Route path="/dashboard/kritik-saran" element={<KisarUser />} />
-      <Route path="/admin" element={<PrivateRouteAdmin />}>
-        <Route path="" element={<Dashboard />} />
-        <Route path="list-kategori" element={<ListKategori />} />
-        <Route path="pengaduan/:id" element={<Penanganan />} />
-        <Route path="kritik-saran" element={<Kisar />} />
-      </Route>
+      <Route
+        path="/admin"
+        element={
+          <PrivateRouteAdmin>
+            <Dashboard />
+          </PrivateRouteAdmin>
+        }
+      />
+      <Route
+        path="/admin/list-kategori"
+        element={
+          <PrivateRouteAdmin>
+            <ListKategori />
+          </PrivateRouteAdmin>
+        }
+      />
+      <Route
+        path="/admin/pengaduan/:id"
+        element={
+          <PrivateRouteAdmin>
+            <Penanganan />
+          </PrivateRouteAdmin>
+        }
+      />
+      <Route
+        path="/admin/pengaduan/:id"
+        element={
+          <PrivateRouteAdmin>
+            <Kisar />
+          </PrivateRouteAdmin>
+        }
+      />
       <Route path="*" element={<h1>halaman tidak ditemukan</h1>} />
     </Routes>
   );
