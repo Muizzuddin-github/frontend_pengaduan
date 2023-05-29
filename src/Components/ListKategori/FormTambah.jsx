@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import katPengaduanApi from "../../api/katPengaduanApi";
+import { RootContext } from "../GlobalState";
+import auth from "../../api/auth";
 
 const FormTambah = (props) => {
   const [image, setImage] = useState(null);
@@ -9,6 +11,13 @@ const FormTambah = (props) => {
   const [uploadFoto, setUploadFoto] = useState(null);
   const redirect = useNavigate();
 
+  const { token, setToken } = useContext(RootContext);
+
+  const hideForm = () => {
+    const close = document.querySelector(".tambah-kategori");
+    close.classList.add("hidden");
+  };
+
   const handleUpload = async (e) => {
     e.preventDefault();
     const data = new FormData();
@@ -16,53 +25,29 @@ const FormTambah = (props) => {
     data.append("deskripsi", deskripsi);
     data.append("foto", uploadFoto);
     try {
-      await axios.post("http://localhost:8080/admin/kategori-pengaduan", data, {
-        headers: {
-          Authorization: `Bearer ${props.token}`,
-        },
-      });
+      await katPengaduanApi.add(data, token);
 
-      const result = await axios.get(
-        "http://localhost:8080/users/kategori-pengaduan",
-        {
-          headers: {
-            Authorization: `Bearer ${props.token}`,
-          },
-        }
-      );
+      const result = await katPengaduanApi.getAll(token);
       alert("berhasil menambah kategori");
       props.setKategori(result.data.data);
-      const close = document.querySelector(".tambah-kategori");
-      close.classList.add("hidden");
+      hideForm();
       e.target.reset();
       setImage(null);
     } catch (err) {
       if (err.response.status === 401) {
         try {
-          const { data } = await axios.get(
-            "http://localhost:8080/users/refresh-access-token"
-          );
+          const newToken = await auth.getToken();
+          await katPengaduanApi.add(data, newToken.data.accessToken);
 
-          await axios.post(
-            "http://localhost:8080/admin/kategori-pengaduan",
-            data,
-            {
-              headers: {
-                Authorization: `Bearer ${data.accessToken}`,
-              },
-            }
+          const result = await katPengaduanApi.getAll(
+            newToken.data.accessToken
           );
-
-          const result = await axios.get(
-            "http://localhost:8080/users/kategori-pengaduan",
-            {
-              headers: {
-                Authorization: `Bearer ${data.accessToken}`,
-              },
-            }
-          );
-          props.setToken(data.accessToken);
+          alert("berhasil menambah kategori");
+          setToken(newToken.data.accessToken);
           props.setKategori(result.data.data);
+          hideForm();
+          e.target.reset();
+          setImage(null);
         } catch (err) {
           redirect("/login");
         }
@@ -75,11 +60,6 @@ const FormTambah = (props) => {
       setImage(URL.createObjectURL(event.target.files[0]));
       setUploadFoto(event.target.files[0]);
     }
-  };
-
-  const hideForm = () => {
-    const close = document.querySelector(".tambah-kategori");
-    close.classList.add("hidden");
   };
 
   return (

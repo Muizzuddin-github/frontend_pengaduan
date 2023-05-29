@@ -1,62 +1,38 @@
 import Cards from "./Components/Pelayanan/Cards";
 import SideMenu from "./Components/Menu/SideMenu";
 import Navigasi from "./Components/Menu/Navigasi";
-import { useEffect } from "react";
-import { useState } from "react";
-import axios from "axios";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import PopUpKonfir from "./Components/Pelayanan/PopUpKonfir";
+import { RootContext } from "./Components/GlobalState";
+import pengaduanApi from "./api/pengaduanApi";
+import auth from "./api/auth";
 
 const Dashboard = () => {
   const [pengaduan, setPengaduan] = useState([]);
-  const [token, setToken] = useState("");
   const redirect = useNavigate();
   const [id, setId] = useState(0);
 
+  const { token, setToken } = useContext(RootContext);
+
   useEffect(function () {
-    axios
-      .get("http://localhost:8080/users/refresh-access-token")
-      .then(({ data }) => {
-        setToken(data.accessToken);
-        axios
-          .get("http://localhost:8080/admin/pengaduan/terkirim", {
-            headers: {
-              Authorization: `Bearer ${data.accessToken}`,
-            },
-          })
-          .then(({ data }) => setPengaduan(data.data));
-      })
-      .catch((err) => {
-        redirect("/login");
-      });
+    pengaduanApi
+      .getAllByStatus("terkirim", token)
+      .then(({ data }) => setPengaduan(data.data));
   }, []);
 
   const getPengaduan = async (status) => {
     try {
-      const dataProses = await axios.get(
-        `http://localhost:8080/admin/pengaduan/${status}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setPengaduan(dataProses.data.data);
+      const dataPengaduan = await pengaduanApi.getAllByStatus(status, token);
+      setPengaduan(dataPengaduan.data.data);
+      console.log(dataPengaduan);
     } catch (err) {
       try {
-        const { data } = await axios.get(
-          "http://localhost:8080/users/refresh-access-token"
+        const { data } = await auth.getToken();
+        const dataProses = await pengaduanApi.getAllByStatus(
+          status,
+          data.accessToken
         );
-
-        const dataProses = await axios.get(
-          `http://localhost:8080/admin/pengaduan/${status}`,
-          {
-            headers: {
-              Authorization: `Bearer ${data.accessToken}`,
-            },
-          }
-        );
-
         setToken(data.accessToken);
         setPengaduan(dataProses.data.data);
       } catch (err) {

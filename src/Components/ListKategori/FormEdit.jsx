@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import katPengaduanApi from "../../api/katPengaduanApi";
+import { RootContext } from "../GlobalState";
+import auth from "../../api/auth";
 
 const FormEdit = (props) => {
   const [image, setImage] = useState(null);
@@ -8,6 +10,8 @@ const FormEdit = (props) => {
   const [deskripsi, setDeskripsi] = useState("");
   const [uploadFoto, setUploadFoto] = useState(null);
   const redirect = useNavigate();
+
+  const { token, setToken } = useContext(RootContext);
 
   const handleUploadImage = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -36,53 +40,31 @@ const FormEdit = (props) => {
     data.append("deskripsi", deskripsi);
     data.append("foto", uploadFoto);
     try {
-      await axios.put(
-        `http://localhost:8080/admin/kategori-pengaduan/${props.idKategori}`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${props.token}`,
-          },
-        }
-      );
-      const result = await axios.get(
-        "http://localhost:8080/users/kategori-pengaduan",
-        {
-          headers: {
-            Authorization: `Bearer ${props.token}`,
-          },
-        }
-      );
+      await katPengaduanApi.edit(props.idKategori, data, token);
+      const result = await katPengaduanApi.getAll(token);
       alert("berhasil mengubah kategori");
       props.setKategori(result.data.data);
-      const close = document.querySelector(".edit-kategori");
-      close.classList.add("hidden");
+      hideForm();
+      setImage(null);
+      e.target.reset();
     } catch (err) {
-      console.log(err);
       if (err.response.status === 401) {
         try {
-          const { data } = await axios.get(
-            "http://localhost:8080/users/refresh-access-token"
-          );
-          await axios.put(
-            `http://localhost:8080/admin/kategori-pengaduan/${props.idKategori}`,
+          const newToken = await auth.getToken();
+          await katPengaduanApi.edit(
+            props.idKategori,
             data,
-            {
-              headers: {
-                Authorization: `Bearer ${data.accessToken}`,
-              },
-            }
+            newToken.data.accessToken
           );
-          const result = await axios.get(
-            "http://localhost:8080/users/kategori-pengaduan",
-            {
-              headers: {
-                Authorization: `Bearer ${data.accessToken}`,
-              },
-            }
+          const result = await katPengaduanApi.getAll(
+            newToken.data.accessToken
           );
-          props.setToken(data.accessToken);
+          alert("berhasil mengubah kategori");
+          setToken(newToken.data.accessToken);
           props.setKategori(result.data.data);
+          hideForm();
+          setImage(null);
+          e.target.reset();
         } catch (err) {
           redirect("/login");
         }

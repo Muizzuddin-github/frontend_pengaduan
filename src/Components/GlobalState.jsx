@@ -3,10 +3,10 @@ import { createContext, useState } from "react";
 export const RootContext = createContext();
 
 const GlobalState = ({ children }) => {
-  const [accessToken, setAccessToken] = useState("");
+  const [token, setToken] = useState("");
 
   return (
-    <RootContext.Provider value={{ accessToken, setAccessToken }}>
+    <RootContext.Provider value={{ token, setToken }}>
       {children}
     </RootContext.Provider>
   );

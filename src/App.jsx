@@ -39,7 +39,7 @@ function App() {
         }
       />
       <Route
-        path="/admin/pengaduan/:id"
+        path="/admin/kritik-saran"
         element={
           <PrivateRouteAdmin>
             <Kisar />

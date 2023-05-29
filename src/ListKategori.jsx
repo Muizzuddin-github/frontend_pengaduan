@@ -1,14 +1,14 @@
 import CardsKategori from "./Components/ListKategori/Cards";
 import FormTambah from "./Components/ListKategori/FormTambah";
 import Navigasi from "./Components/Menu/Navigasi";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState, useEffect, useContext } from "react";
 import ConfirmHapus from "./Components/ListKategori/ConfirmHapus";
 import { useNavigate } from "react-router-dom";
 import FormEdit from "./Components/ListKategori/FormEdit";
+import katPengaduanApi from "./api/katPengaduanApi";
+import { RootContext } from "./Components/GlobalState";
 
 const ListKategori = () => {
-  const redirect = useNavigate();
   const showForm = () => {
     const tampil = document.querySelector(".tambah-kategori");
     tampil.classList.remove("hidden");
@@ -18,24 +18,10 @@ const ListKategori = () => {
   const [idKategori, setIdKategori] = useState(0);
   const [detilKategori, setDetilKategori] = useState({});
   const [kategori, setKategori] = useState([]);
-  const [token, setToken] = useState("");
+  const { token, setToken } = useContext(RootContext);
 
   useEffect(function () {
-    axios
-      .get("http://localhost:8080/users/refresh-access-token")
-      .then(({ data }) => {
-        setToken(data.accessToken);
-        axios
-          .get("http://localhost:8080/users/kategori-pengaduan", {
-            headers: {
-              Authorization: `Bearer ${data.accessToken}`,
-            },
-          })
-          .then(({ data }) => setKategori(data.data));
-      })
-      .catch((err) => {
-        redirect("/login");
-      });
+    katPengaduanApi.getAll(token).then(({ data }) => setKategori(data.data));
   }, []);
 
   return (

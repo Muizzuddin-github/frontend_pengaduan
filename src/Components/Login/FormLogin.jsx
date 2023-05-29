@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import auth from "../../api/auth";
 
 const FormLogin = () => {
   const [email, setEmail] = useState("");
@@ -11,11 +11,12 @@ const FormLogin = () => {
   const handleClick = async (e) => {
     try {
       e.preventDefault();
-      const { data } = await axios.post("http://localhost:8080/users/login", {
-        email: email,
-        password: password,
+
+      const { data } = await auth.login({
+        email,
+        password,
       });
-      redirect("/admin");
+      redirect(data.redirectURL);
       alert(`Berhasil Login ${email} ${password}`);
     } catch (error) {
       console.log(error);
