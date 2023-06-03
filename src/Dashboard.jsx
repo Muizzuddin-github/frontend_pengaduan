@@ -11,6 +11,7 @@ const Dashboard = () => {
   const [pengaduan, setPengaduan] = useState([]);
   const redirect = useNavigate();
   const [id, setId] = useState(0);
+  const [isLogin, setIsLogin] = useState(false);
 
   const [token, setToken] = useState("");
 
@@ -26,6 +27,7 @@ const Dashboard = () => {
             .getAllByStatus("terkirim", data.accessToken)
             .then(({ data }) => setPengaduan(data.data));
           setToken(data.accessToken);
+          setIsLogin(true);
         }
       })
       .catch((err) => redirect("/login"));
@@ -54,7 +56,7 @@ const Dashboard = () => {
     setId(id);
   };
 
-  return (
+  return isLogin ? (
     <div className="dash-admin bg-slate-300">
       <div>
         <div className="text-right">
@@ -80,6 +82,8 @@ const Dashboard = () => {
       </div>
       <PopUpKonfir id={id} />
     </div>
+  ) : (
+    ""
   );
 };
 

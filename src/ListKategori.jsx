@@ -21,6 +21,7 @@ const ListKategori = () => {
   const [detilKategori, setDetilKategori] = useState({});
   const [kategori, setKategori] = useState([]);
   const [token, setToken] = useState("");
+  const [isLogin, setIsLogin] = useState(false);
 
   useEffect(function () {
     auth
@@ -34,12 +35,13 @@ const ListKategori = () => {
             .getAll(data.accessToken)
             .then(({ data }) => setKategori(data.data));
           setToken(data.accessToken);
+          setIsLogin(true);
         }
       })
       .catch((err) => redirect("/login"));
   }, []);
 
-  return (
+  return isLogin ? (
     <>
       <div>
         <Navigasi />
@@ -86,6 +88,8 @@ const ListKategori = () => {
         setToken={setToken}
       />
     </>
+  ) : (
+    ""
   );
 };
 

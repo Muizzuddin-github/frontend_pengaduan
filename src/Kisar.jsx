@@ -1,21 +1,34 @@
 import Komentar from "./Components/komentar/Komentar";
 import DetilKomentar from "./Components/komentar/DetilKomentar";
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import krisarApi from "./api/krisarApi";
-import { RootContext } from "./Components/GlobalState";
 import Navigasi from "./Components/Menu/Navigasi";
+import auth from "./api/auth";
 
 const Kisar = () => {
   const [kritik, setKritik] = useState({});
   const [komentar, setKomentar] = useState([]);
-  const { token, setToken } = useContext(RootContext);
+  const [token, setToken] = useState("");
+  const [isLogin, setIsLogin] = useState(false);
 
   useEffect(function () {
-    krisarApi.getAll(token).then(({ data }) => {
-      setKomentar(data.data);
-    });
+    auth
+      .getToken()
+      .then(({ data }) => {
+        const isAdmin = data.data[0].role;
+        if (isAdmin !== "Admin") {
+          redirect("/dashboard");
+        } else {
+          krisarApi.getAll(data.accessToken).then(({ data }) => {
+            setKomentar(data.data);
+          });
+          setToken(data.accessToken);
+          setIsLogin(true);
+        }
+      })
+      .catch((err) => redirect("/login"));
   }, []);
-  return (
+  return isLogin ? (
     <div className="kisar">
       <DetilKomentar data={kritik} />
       <div>
@@ -34,6 +47,8 @@ const Kisar = () => {
         </div>
       </div>
     </div>
+  ) : (
+    ""
   );
 };
 

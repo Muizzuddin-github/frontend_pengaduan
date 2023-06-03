@@ -14,6 +14,7 @@ const Penanganan = () => {
   const [errNotUploadImg, setErrNotUploadImg] = useState(false);
   const [token, setToken] = useState("");
   const redirect = useNavigate();
+  const [isLogin, setIsLogin] = useState(false);
 
   // single pengaduan
   const [singlePengaduan, setSinglePengaduan] = useState({});
@@ -28,6 +29,7 @@ const Penanganan = () => {
           .then(({ data }) => setSinglePengaduan(data.data[0]))
           .catch((err) => console.log(err));
         setToken(data.accessToken);
+        setIsLogin(true);
       })
       .catch((err) => {
         redirect("/login");
@@ -89,7 +91,7 @@ const Penanganan = () => {
     }
   };
 
-  return (
+  return isLogin ? (
     <div>
       <Navigasi />
 
@@ -171,6 +173,8 @@ const Penanganan = () => {
         </div>
       </div>
     </div>
+  ) : (
+    ""
   );
 };
 
