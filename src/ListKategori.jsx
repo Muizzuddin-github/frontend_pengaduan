@@ -1,12 +1,12 @@
 import CardsKategori from "./Components/ListKategori/Cards";
 import FormTambah from "./Components/ListKategori/FormTambah";
 import Navigasi from "./Components/Menu/Navigasi";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import ConfirmHapus from "./Components/ListKategori/ConfirmHapus";
 import { useNavigate } from "react-router-dom";
 import FormEdit from "./Components/ListKategori/FormEdit";
 import katPengaduanApi from "./api/katPengaduanApi";
-import { RootContext } from "./Components/GlobalState";
+import auth from "./api/auth";
 
 const ListKategori = () => {
   const showForm = () => {
@@ -15,13 +15,28 @@ const ListKategori = () => {
     tampil.classList.add("flex");
   };
 
+  const redirect = useNavigate();
+
   const [idKategori, setIdKategori] = useState(0);
   const [detilKategori, setDetilKategori] = useState({});
   const [kategori, setKategori] = useState([]);
-  const { token, setToken } = useContext(RootContext);
+  const [token, setToken] = useState("");
 
   useEffect(function () {
-    katPengaduanApi.getAll(token).then(({ data }) => setKategori(data.data));
+    auth
+      .getToken()
+      .then(({ data }) => {
+        const isAdmin = data.data[0].role;
+        if (isAdmin !== "Admin") {
+          redirect("/dashboard");
+        } else {
+          katPengaduanApi
+            .getAll(data.accessToken)
+            .then(({ data }) => setKategori(data.data));
+          setToken(data.accessToken);
+        }
+      })
+      .catch((err) => redirect("/login"));
   }, []);
 
   return (

@@ -1,10 +1,9 @@
 import Cards from "./Components/Pelayanan/Cards";
 import SideMenu from "./Components/Menu/SideMenu";
 import Navigasi from "./Components/Menu/Navigasi";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PopUpKonfir from "./Components/Pelayanan/PopUpKonfir";
-import { RootContext } from "./Components/GlobalState";
 import pengaduanApi from "./api/pengaduanApi";
 import auth from "./api/auth";
 
@@ -13,19 +12,29 @@ const Dashboard = () => {
   const redirect = useNavigate();
   const [id, setId] = useState(0);
 
-  const { token, setToken } = useContext(RootContext);
+  const [token, setToken] = useState("");
 
   useEffect(function () {
-    pengaduanApi
-      .getAllByStatus("terkirim", token)
-      .then(({ data }) => setPengaduan(data.data));
+    auth
+      .getToken()
+      .then(({ data }) => {
+        const isAdmin = data.data[0].role;
+        if (isAdmin !== "Admin") {
+          redirect("/dashboard");
+        } else {
+          pengaduanApi
+            .getAllByStatus("terkirim", data.accessToken)
+            .then(({ data }) => setPengaduan(data.data));
+          setToken(data.accessToken);
+        }
+      })
+      .catch((err) => redirect("/login"));
   }, []);
 
   const getPengaduan = async (status) => {
     try {
       const dataPengaduan = await pengaduanApi.getAllByStatus(status, token);
       setPengaduan(dataPengaduan.data.data);
-      console.log(dataPengaduan);
     } catch (err) {
       try {
         const { data } = await auth.getToken();

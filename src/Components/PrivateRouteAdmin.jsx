@@ -19,6 +19,7 @@ const PrivateRouteAdmin = ({ children }) => {
         } else {
           setToken(data.accessToken);
           setIsLogin(true);
+          alert("oke");
         }
       })
       .catch((err) => redirect("/login"));

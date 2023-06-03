@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import SinglePengaduan from "./Components/Penanganan/SinglePengaduan";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import penangananApi from "./api/penangananApi";
+import auth from "./api/auth";
 
 const Penanganan = () => {
   const [img, setImg] = useState(null);
@@ -18,17 +20,14 @@ const Penanganan = () => {
   const { id } = useParams();
 
   useEffect(function () {
-    axios
-      .get("http://localhost:8080/users/refresh-access-token")
+    auth
+      .getToken()
       .then(({ data }) => {
+        penangananApi
+          .getSingle(id, data.accessToken)
+          .then(({ data }) => setSinglePengaduan(data.data[0]))
+          .catch((err) => console.log(err));
         setToken(data.accessToken);
-        axios
-          .get(`http://localhost:8080/admin/pengaduan-single/${id}`, {
-            headers: {
-              Authorization: `Bearer ${data.accessToken}`,
-            },
-          })
-          .then(({ data }) => setSinglePengaduan(data.data[0]));
       })
       .catch((err) => {
         redirect("/login");
