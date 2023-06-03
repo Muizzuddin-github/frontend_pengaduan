@@ -66,8 +66,14 @@ const FormEdit = (props) => {
           setImage(null);
           e.target.reset();
         } catch (err) {
+          if (err.response.status === 400) {
+            alert(err.response.data.errors.join(" "));
+            return;
+          }
           redirect("/login");
         }
+      } else {
+        alert(err.response.data.errors.join(" "));
       }
     }
   };

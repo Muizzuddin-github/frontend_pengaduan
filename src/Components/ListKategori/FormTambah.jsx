@@ -49,8 +49,14 @@ const FormTambah = (props) => {
           e.target.reset();
           setImage(null);
         } catch (err) {
+          if (err.response.status === 400) {
+            alert(err.response.data.errors.join(" "));
+            return;
+          }
           redirect("/login");
         }
+      } else {
+        alert(err.response.data.errors.join(" "));
       }
     }
   };
