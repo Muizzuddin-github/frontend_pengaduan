@@ -24,18 +24,20 @@ const ListKategori = () => {
   const [isLogin, setIsLogin] = useState(false);
 
   useEffect(function () {
+    document.title = "List-kategori";
     auth
       .getToken()
       .then(({ data }) => {
         const isAdmin = data.data[0].role;
         if (isAdmin !== "Admin") {
           redirect("/dashboard");
+          return;
         } else {
-          katPengaduanApi
-            .getAll(data.accessToken)
-            .then(({ data }) => setKategori(data.data));
-          setToken(data.accessToken);
-          setIsLogin(true);
+          katPengaduanApi.getAll(data.accessToken).then((res) => {
+            setKategori(res.data.data);
+            setToken(data.accessToken);
+            setIsLogin(true);
+          });
         }
       })
       .catch((err) => redirect("/login"));

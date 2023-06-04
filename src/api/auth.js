@@ -6,6 +6,7 @@ const auth = {
   isLogin: async () => await axios.get("http://localhost:8080/users/islogin"),
   getToken: async () =>
     await axios.get("http://localhost:8080/users/refresh-access-token"),
+  logout: async () => await axios.put("http://localhost:8080/users/logout"),
 };
 
 export default auth;

@@ -12,20 +12,21 @@ const Kisar = () => {
   const [isLogin, setIsLogin] = useState(false);
 
   useEffect(function () {
+    document.title = "Krisar";
     auth
       .getToken()
       .then(({ data }) => {
         const isAdmin = data.data[0].role;
         if (isAdmin !== "Admin") {
           redirect("/dashboard");
-        } else {
-          krisarApi.getAll(data.accessToken).then(({ data }) => {
-            console.log(data.data);
-            setKomentar(data.data);
-          });
+          return;
+        }
+
+        krisarApi.getAll(data.accessToken).then((res) => {
           setToken(data.accessToken);
           setIsLogin(true);
-        }
+          setKomentar(res.data.data);
+        });
       })
       .catch((err) => redirect("/login"));
   }, []);

@@ -16,19 +16,23 @@ const Dashboard = () => {
   const [token, setToken] = useState("");
 
   useEffect(function () {
+    document.title = "Admin";
     auth
       .getToken()
       .then(({ data }) => {
         const isAdmin = data.data[0].role;
         if (isAdmin !== "Admin") {
           redirect("/dashboard");
-        } else {
-          pengaduanApi
-            .getAllByStatus("terkirim", data.accessToken)
-            .then(({ data }) => setPengaduan(data.data));
-          setToken(data.accessToken);
-          setIsLogin(true);
+          return;
         }
+
+        pengaduanApi
+          .getAllByStatus("terkirim", data.accessToken)
+          .then((res) => {
+            setPengaduan(res.data.data);
+            setToken(data.accessToken);
+            setIsLogin(true);
+          });
       })
       .catch((err) => redirect("/login"));
   }, []);

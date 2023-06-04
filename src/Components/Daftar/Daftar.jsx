@@ -1,27 +1,48 @@
-import { useState } from "react";
-import axios from "axios";
+import { useState, useEffect } from "react";
 import daftar from "../../api/daftar";
+import { useNavigate } from "react-router-dom";
+import auth from "../../api/auth";
 
 function Daftar() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const redirect = useNavigate();
+  const [isLogin, setIsLogin] = useState(true);
+
+  useEffect(function () {
+    document.title = "Daftar";
+    auth
+      .isLogin()
+      .then(({ data }) => {
+        if (data.data[0].role) {
+          redirect("/admin");
+          return;
+        }
+
+        setIsLogin(false);
+      })
+      .catch((err) => setIsLogin(false));
+  }, []);
 
   const submit = async (e) => {
     e.preventDefault();
-    try{
-        const { data } = await daftar.daftar({
-            username,
-            email,
-            password,
-          });
-          alert('Berhasil Daftar')
-    }catch(error){
-        alert(error.response.data.errors.join('\n'))
+    try {
+      const { data } = await daftar.daftar({
+        username,
+        email,
+        password,
+      });
+      alert("Berhasil Daftar");
+      redirect("/login");
+    } catch (error) {
+      alert(error.response.data.errors.join("\n"));
     }
   };
 
-  return (
+  return isLogin ? (
+    ""
+  ) : (
     <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
       <div className="relative py-3 sm:max-w-xl sm:mx-auto">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-300 to-blue-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
@@ -87,9 +108,7 @@ function Daftar() {
                     </label>
                   </div>
                   <div className="relative">
-                    <button
-                      className="bg-blue-500 text-white rounded-md px-2 py-1"
-                    >
+                    <button className="bg-blue-500 text-white rounded-md px-2 py-1">
                       Masuk
                     </button>
                   </div>

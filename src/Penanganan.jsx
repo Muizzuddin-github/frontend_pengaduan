@@ -21,15 +21,22 @@ const Penanganan = () => {
   const { id } = useParams();
 
   useEffect(function () {
+    document.title = "Penanganan";
     auth
       .getToken()
       .then(({ data }) => {
+        if (data.data[0].role !== "Admin") {
+          redirect("/dashboard");
+          return;
+        }
         penangananApi
           .getSingle(id, data.accessToken)
-          .then(({ data }) => setSinglePengaduan(data.data[0]))
+          .then((res) => {
+            setSinglePengaduan(res.data.data[0]);
+            setToken(data.accessToken);
+            setIsLogin(true);
+          })
           .catch((err) => console.log(err));
-        setToken(data.accessToken);
-        setIsLogin(true);
       })
       .catch((err) => {
         redirect("/login");
