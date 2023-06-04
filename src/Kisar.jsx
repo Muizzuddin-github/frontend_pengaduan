@@ -20,6 +20,7 @@ const Kisar = () => {
           redirect("/dashboard");
         } else {
           krisarApi.getAll(data.accessToken).then(({ data }) => {
+            console.log(data.data);
             setKomentar(data.data);
           });
           setToken(data.accessToken);
@@ -33,17 +34,19 @@ const Kisar = () => {
       <DetilKomentar data={kritik} />
       <div>
         <Navigasi />
-        <h1 className="mt-8 font-medium text-2xl">Kritik dan saran</h1>
-        <div className="py-4 mt-5 flex flex-wrap justify-around items-center">
-          {komentar.map((v, i) => (
-            <Komentar
-              key={i}
-              kritik={v.kritik}
-              saran={v.saran}
-              username={v.username}
-              setKritik={setKritik}
-            />
-          ))}
+        <div className="px-8 py-8">
+          <h1 className="mt-8 font-medium text-2xl">Kritik dan saran</h1>
+          <div className="py-4 mt-5 flex flex-wrap justify-around items-center ">
+            {komentar.map((v, i) => (
+              <Komentar
+                key={i}
+                kritik={v.kritik}
+                saran={v.saran}
+                username={v.username}
+                setKritik={setKritik}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>
