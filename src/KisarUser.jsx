@@ -12,6 +12,7 @@ const KisarUser = () => {
   const [id, setID] = useState(0);
   const [komentar, setKomentar] = useState([]);
   const [token, setToken] = useState("");
+  const [user, setUser] = useState({});
 
   const [isLogin, setIsLogin] = useState(false);
 
@@ -29,6 +30,7 @@ const KisarUser = () => {
           setKomentar(res.data.data);
           setIsLogin(true);
           setToken(data.accessToken);
+          setUser(data.data[0]);
         });
       })
       .catch((err) => redirect("/login"));
@@ -59,7 +61,7 @@ const KisarUser = () => {
         token={token}
         setToken={setToken}
       />
-      <NavigasiUser />
+      <NavigasiUser user={user} />
       <div>
         <div className="px-8 py-4">
           <div className="flex justify-between items-center mt-8">

@@ -1,7 +1,11 @@
 import DetailPel from "./DetailPel";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import auth from "../../api/auth";
+import { Link } from "react-router-dom";
 
-const Cards = ({ data, setPengaduan, setAccessToken, accessToken, ubahId }) => {
+const Cards = ({ data, setPengaduan, setToken, token, ubahId }) => {
+  const redirect = useNavigate();
   const handleTerima = async () => {
     try {
       await axios.patch(
@@ -11,7 +15,7 @@ const Cards = ({ data, setPengaduan, setAccessToken, accessToken, ubahId }) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -19,9 +23,7 @@ const Cards = ({ data, setPengaduan, setAccessToken, accessToken, ubahId }) => {
       setPengaduan((prev) => prev.filter((v) => v.id != data.id));
     } catch (err) {
       try {
-        const { data } = await axios.get(
-          "http://localhost:8080/users/refresh-access-token"
-        );
+        const ref = await auth.getToken();
 
         await axios.patch(
           `http://localhost:8080/admin/pengaduan/${data.id}`,
@@ -30,12 +32,12 @@ const Cards = ({ data, setPengaduan, setAccessToken, accessToken, ubahId }) => {
           },
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${ref.data.accessToken}`,
             },
           }
         );
 
-        setAccessToken(data.accessToken);
+        setToken(ref.data.accessToken);
         setPengaduan(dataProses.data.data);
       } catch (err) {
         redirect("/login");
@@ -78,24 +80,26 @@ const Cards = ({ data, setPengaduan, setAccessToken, accessToken, ubahId }) => {
                     Terima
                   </button>
                 ) : (
-                  <button
+                  <Link
+                    to={`/admin/pengaduan/${data.id}`}
                     className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                     data-modal-target="popup-modal"
                     data-modal-toggle="popup-modal"
                   >
                     Tangani
-                  </button>
+                  </Link>
                 )}
 
-                {data.status != 'diproses' ? (
+                {data.status != "diproses" ? (
                   <button
-                  className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                  onClick={konfirmTolak}
-                  
-                >
-                  Tolak
-                </button>
-                ) : ''}
+                    className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                    onClick={konfirmTolak}
+                  >
+                    Tolak
+                  </button>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>
