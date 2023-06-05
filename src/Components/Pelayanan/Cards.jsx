@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import DetailPel from "./DetailPel";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -74,14 +73,24 @@ const Cards = ({ data, setPengaduan, setToken, token, ubahId }) => {
                 tanggal={data.tanggal}
               />
               <div className="flex mt-14 btn-cards">
-                {data.status == "terkirim" ? (
-                  <button
-                    onClick={handleTerima}
-                    className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-                  >
-                    Terima
-                  </button>
-                ) : (
+                {data.status == "terkirim" && (
+                  <>
+                    <button
+                      onClick={handleTerima}
+                      className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                    >
+                      Terima
+                    </button>
+                    <button
+                      className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                      onClick={konfirmTolak}
+                    >
+                      Tolak
+                    </button>
+                  </>
+                )}
+
+                {data.status === "diproses" && (
                   <Link
                     to={`/admin/pengaduan/${data.id}`}
                     className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
@@ -90,17 +99,6 @@ const Cards = ({ data, setPengaduan, setToken, token, ubahId }) => {
                   >
                     Tangani
                   </Link>
-                )}
-
-                {data.status != "diproses" ? (
-                  <button
-                    className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                    onClick={konfirmTolak}
-                  >
-                    Tolak
-                  </button>
-                ) : (
-                  ""
                 )}
               </div>
             </div>
