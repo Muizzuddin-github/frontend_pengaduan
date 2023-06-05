@@ -1,7 +1,8 @@
+import { Link } from "react-router-dom";
 import DetailPel from "./DetailPel";
 import axios from "axios";
 
-const Cards = ({ data, setPengaduan, setAccessToken, accessToken, ubahId }) => {
+const Cards = ({ data, setPengaduan, setToken, token, ubahId }) => {
   const handleTerima = async () => {
     try {
       await axios.patch(
@@ -11,7 +12,7 @@ const Cards = ({ data, setPengaduan, setAccessToken, accessToken, ubahId }) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -35,7 +36,7 @@ const Cards = ({ data, setPengaduan, setAccessToken, accessToken, ubahId }) => {
           }
         );
 
-        setAccessToken(data.accessToken);
+        setToken(data.accessToken);
         setPengaduan(dataProses.data.data);
       } catch (err) {
         redirect("/login");
@@ -70,32 +71,33 @@ const Cards = ({ data, setPengaduan, setAccessToken, accessToken, ubahId }) => {
                 tanggal={data.tanggal}
               />
               <div className="flex mt-14 btn-cards">
-                {data.status == "terkirim" ? (
-                  <button
-                    onClick={handleTerima}
-                    className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-                  >
-                    Terima
-                  </button>
-                ) : (
-                  <button
+                {data.status == "terkirim" && (
+                  <>
+                    <button
+                      onClick={handleTerima}
+                      className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                    >
+                      Terima
+                    </button>
+                    <button
+                      className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                      onClick={konfirmTolak}
+                    >
+                      Tolak
+                    </button>
+                  </>
+                )}
+
+                {data.status === "diproses" && (
+                  <Link
+                    to={`/admin/pengaduan/${data.id}`}
                     className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                     data-modal-target="popup-modal"
                     data-modal-toggle="popup-modal"
                   >
                     Tangani
-                  </button>
+                  </Link>
                 )}
-
-                {data.status != 'diproses' ? (
-                  <button
-                  className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                  onClick={konfirmTolak}
-                  
-                >
-                  Tolak
-                </button>
-                ) : ''}
               </div>
             </div>
           </div>

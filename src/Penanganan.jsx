@@ -8,7 +8,7 @@ import auth from "./api/auth";
 
 const Penanganan = () => {
   const [img, setImg] = useState(null);
-  const [jenisPengaduan, setJenisPengaduan] = useState("selesai");
+  const [jenisPengaduan, setJenisPengaduan] = useState("Pilih");
   const [imgUpload, setImgUpload] = useState(null);
   const [deskripsi, setDeskripsi] = useState("");
   const [errNotUploadImg, setErrNotUploadImg] = useState(false);
@@ -52,19 +52,23 @@ const Penanganan = () => {
   };
 
   const handlePenanganan = async (e) => {
+    e.preventDefault();
     const data = new FormData();
     data.append("foto_bukti", imgUpload);
     data.append("deskripsi", deskripsi);
     data.append("pengaduanID", +id);
     data.append("status", jenisPengaduan);
+
+    if (jenisPengaduan === "Pilih") {
+      alert("silahkan piliah jenis penangan terlebih dahulu");
+      return;
+    }
+
     try {
-      e.preventDefault();
       if (!imgUpload) {
         setErrNotUploadImg(true);
         return;
       }
-
-      console.log(token);
 
       await axios.post("http://localhost:8080/admin/penanganan", data, {
         headers: {
@@ -92,8 +96,14 @@ const Penanganan = () => {
           alert("berhasil melakukan penanganan");
           redirect("/admin/pengaduan");
         } catch (err) {
+          if (err.response.status === 404) {
+            alert(err.response.data.errors.join("\n"));
+            return;
+          }
           redirect("/login");
         }
+      } else if (err.response.status === 404) {
+        alert(err.response.data.errors.join("\n"));
       }
     }
   };
@@ -139,27 +149,14 @@ const Penanganan = () => {
               />
             </div>
             <div className="my-1">
-              <div className="text-sm">
-                <label htmlFor="setuju">selesai</label>
-                <input
-                  type="radio"
-                  id="setuju"
-                  name="jenis-penanganan"
-                  checked
-                  className="ml-2"
-                  onChange={() => setJenisPengaduan("selesai")}
-                />
-              </div>
-              <div className="text-sm mt-1">
-                <label htmlFor="tolak">tolak</label>
-                <input
-                  type="radio"
-                  id="tolak"
-                  name="jenis-penanganan"
-                  className="ml-3.5"
-                  onChange={() => setJenisPengaduan("ditolak")}
-                />
-              </div>
+              <select
+                className="text-[.8rem]"
+                onChange={(e) => setJenisPengaduan(e.target.value)}
+              >
+                <option value="Pilih">Pilih</option>
+                <option value="selesai">Selesai</option>
+                <option value="ditolak">Ditolak</option>
+              </select>
             </div>
             <div className="py-2">
               <textarea
