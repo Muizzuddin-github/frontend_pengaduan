@@ -1,7 +1,8 @@
 import auth from "../../api/auth";
 import { useNavigate } from "react-router-dom";
 
-const NavigasiUser = () => {
+const NavigasiUser = (props) => {
+  console.log(props);
   const redirect = useNavigate();
   const logout = async () => {
     try {
@@ -17,7 +18,7 @@ const NavigasiUser = () => {
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <div>
           <p className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-            Welcome
+            Welcome {props.user.username}
           </p>
         </div>
         <button
