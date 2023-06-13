@@ -1,8 +1,6 @@
-import axios from "axios";
+import axiosIns from "./axiosInstance"
 
 const daftar = {
-    daftar: async (data) => {
-        return await axios.post("http://localhost:8080/user", data)
-    }
+    daftar: (data) => axiosIns.post("/user", data)
 }
 export default daftar

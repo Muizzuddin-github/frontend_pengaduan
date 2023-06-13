@@ -1,16 +1,15 @@
-import axios from "axios";
+import axiosIns from "./axiosInstance";
 
 const penangananApi = {
-  async getSingle(id, token) {
-    return await axios.get(
-      `http://localhost:8080/admin/pengaduan-single/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-  },
+
+  getSingle : (id,token) => axiosIns.get(
+    `/admin/pengaduan-single/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
 };
 
 export default penangananApi;

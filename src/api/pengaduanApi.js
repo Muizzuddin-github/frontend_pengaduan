@@ -1,13 +1,12 @@
-import axios from "axios";
+import axiosIns from "./axiosInstance";
 
 const pengaduanApi = {
-  async getAllByStatus(status, token) {
-    return await axios.get(`http://localhost:8080/admin/pengaduan/${status}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  },
+
+  getAllByStatus : (status,token) => axiosIns.get(`http://localhost:8080/admin/pengaduan/${status}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
 };
 
 export default pengaduanApi;

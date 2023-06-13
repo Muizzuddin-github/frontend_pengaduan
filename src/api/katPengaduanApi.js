@@ -1,36 +1,32 @@
-import axios from "axios";
+import axiosIns from "./axiosInstance";
 
 const katPengaduanApi = {
-  async getAll(token) {
-    return await axios.get("http://localhost:8080/users/kategori-pengaduan", {
+
+  getAll : (token) => axiosIns.get("/users/kategori-pengaduan", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }),
+
+  add : (data,token) => axiosIns.post(
+    "/admin/kategori-pengaduan",
+    data,
+    {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    });
-  },
+    }
+  ),
 
-  async add(data, token) {
-    return await axios.post(
-      "http://localhost:8080/admin/kategori-pengaduan",
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-  },
-  async edit(id, data, token) {
-    return await axios.put(
-      `http://localhost:8080/admin/kategori-pengaduan/${id}`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-  },
+  edit : (id,data,token) => axiosIns.put(
+    `/admin/kategori-pengaduan/${id}`,
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
 };
 
 export default katPengaduanApi;

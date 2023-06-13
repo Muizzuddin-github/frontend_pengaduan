@@ -1,12 +1,10 @@
-import axios from "axios";
+import axiosIns from "./axiosInstance";
 
 const auth = {
-  login: async (data) =>
-    await axios.post("http://localhost:8080/users/login", data),
-  isLogin: async () => await axios.get("http://localhost:8080/users/islogin"),
-  getToken: async () =>
-    await axios.get("http://localhost:8080/users/refresh-access-token"),
-  logout: async () => await axios.put("http://localhost:8080/users/logout"),
+  login: (data) => axiosIns.post("/users/login", data),
+  isLogin: () => axiosIns.get("/users/islogin"),
+  getToken: () => axiosIns.get("/users/refresh-access-token"),
+  logout: () => axiosIns.put("/users/logout"),
 };
 
 export default auth;
