@@ -1,50 +1,21 @@
-import axios from "axios";
+import katPengaduanApi from "../../api/katPengaduanApi";
 
 const ConfirmHapus = (props) => {
   const hapusKategori = async () => {
     try {
-      await axios.delete(
-        `http://localhost:8080/admin/kategori-pengaduan/${props.idKategoriHapus}`,
-        {
-          headers: {
-            Authorization: `Bearer ${props.token}`,
-          },
-        }
-      );
+      await katPengaduanApi.del(props.idKategoriHapus);
 
-      const result = await axios.get(
-        "http://localhost:8080/users/kategori-pengaduan",
-        {
-          headers: {
-            Authorization: `Bearer ${props.token}`,
-          },
-        }
-      );
+      const result = await katPengaduanApi.getAll();
       alert("berhasil menghapus");
       props.setKategori(result.data.data);
       const close = document.querySelector(".hapus-kategori");
       close.classList.add("hidden");
     } catch (err) {
       if (err.response.status === 401) {
-        try {
-          const { data } = await axios.get(
-            "http://localhost:8080/users/refresh-access-token"
-          );
-          const result = await axios.get(
-            "http://localhost:8080/users/kategori-pengaduan",
-            {
-              headers: {
-                Authorization: `Bearer ${data.accessToken}`,
-              },
-            }
-          );
-          props.setToken(data.accessToken);
-          props.setKategori(result.data.data);
-        } catch (err) {
-          redirect("/login");
-        }
+        redirect("/login");
+      } else {
+        console.log(err);
       }
-      console.log(err);
     }
   };
   const hideConfirm = () => {

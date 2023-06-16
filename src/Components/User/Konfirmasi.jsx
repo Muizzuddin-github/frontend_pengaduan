@@ -1,7 +1,9 @@
 import krisarApi from "../../api/krisarApi";
-import auth from "../../api/auth";
+import { useNavigate } from "react-router-dom";
 
 const Konfirmasi = (props) => {
+  const redirect = useNavigate();
+
   const tutup = (e) => {
     const konfim = e.target.parentElement.parentElement.parentElement;
     konfim.classList.remove("flex");
@@ -10,19 +12,17 @@ const Konfirmasi = (props) => {
 
   const hapus = async (e) => {
     try {
-      await krisarApi.del(props.id, props.token);
-      const { data } = await krisarApi.getAllByUser(props.token);
+      await krisarApi.del(props.id);
+      const { data } = await krisarApi.getAllByUser();
 
       props.setKomentar(data.data);
       tutup(e);
     } catch (err) {
-      const ref = await auth.getToken();
-      await krisarApi.del(props.id, props.token);
-      const { data } = await krisarApi.getAllByUser(ref.data.accessToken);
-
-      props.setKomentar(data.data);
-      props.setToken(ref.data.accessToken);
-      tutup(e);
+      if (err.response.status === 401) {
+        redirect("/login");
+      } else if (err.response.status == 403) {
+        redirect("/admin");
+      }
     }
   };
 

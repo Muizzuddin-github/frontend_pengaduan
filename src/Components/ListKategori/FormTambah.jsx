@@ -1,7 +1,6 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import katPengaduanApi from "../../api/katPengaduanApi";
-import { RootContext } from "../GlobalState";
 import auth from "../../api/auth";
 
 const FormTambah = (props) => {
@@ -10,8 +9,6 @@ const FormTambah = (props) => {
   const [deskripsi, setDeskripsi] = useState("");
   const [uploadFoto, setUploadFoto] = useState(null);
   const redirect = useNavigate();
-
-  const { token, setToken } = useContext(RootContext);
 
   const hideForm = () => {
     const close = document.querySelector(".tambah-kategori");
@@ -25,9 +22,9 @@ const FormTambah = (props) => {
     data.append("deskripsi", deskripsi);
     data.append("foto", uploadFoto);
     try {
-      await katPengaduanApi.add(data, token);
+      await katPengaduanApi.add(data);
 
-      const result = await katPengaduanApi.getAll(token);
+      const result = await katPengaduanApi.getAll();
       alert("berhasil menambah kategori");
       props.setKategori(result.data.data);
       hideForm();
@@ -35,28 +32,11 @@ const FormTambah = (props) => {
       setImage(null);
     } catch (err) {
       if (err.response.status === 401) {
-        try {
-          const newToken = await auth.getToken();
-          await katPengaduanApi.add(data, newToken.data.accessToken);
-
-          const result = await katPengaduanApi.getAll(
-            newToken.data.accessToken
-          );
-          alert("berhasil menambah kategori");
-          setToken(newToken.data.accessToken);
-          props.setKategori(result.data.data);
-          hideForm();
-          e.target.reset();
-          setImage(null);
-        } catch (err) {
-          if (err.response.status === 400) {
-            alert(err.response.data.errors.join(" "));
-            return;
-          }
-          redirect("/login");
-        }
-      } else {
+        redirect("/login");
+      } else if (err.response.status === 400) {
         alert(err.response.data.errors.join(" "));
+      } else {
+        console.log(err);
       }
     }
   };

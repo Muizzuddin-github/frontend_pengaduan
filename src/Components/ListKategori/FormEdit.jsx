@@ -1,7 +1,6 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import katPengaduanApi from "../../api/katPengaduanApi";
-import { RootContext } from "../GlobalState";
 import auth from "../../api/auth";
 
 const FormEdit = (props) => {
@@ -10,8 +9,6 @@ const FormEdit = (props) => {
   const [deskripsi, setDeskripsi] = useState("");
   const [uploadFoto, setUploadFoto] = useState(null);
   const redirect = useNavigate();
-
-  const { token, setToken } = useContext(RootContext);
 
   const handleUploadImage = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -40,8 +37,8 @@ const FormEdit = (props) => {
     data.append("deskripsi", deskripsi);
     data.append("foto", uploadFoto);
     try {
-      await katPengaduanApi.edit(props.idKategori, data, token);
-      const result = await katPengaduanApi.getAll(token);
+      await katPengaduanApi.edit(props.idKategori, data);
+      const result = await katPengaduanApi.getAll();
       alert("berhasil mengubah kategori");
       props.setKategori(result.data.data);
       hideForm();
@@ -49,31 +46,11 @@ const FormEdit = (props) => {
       e.target.reset();
     } catch (err) {
       if (err.response.status === 401) {
-        try {
-          const newToken = await auth.getToken();
-          await katPengaduanApi.edit(
-            props.idKategori,
-            data,
-            newToken.data.accessToken
-          );
-          const result = await katPengaduanApi.getAll(
-            newToken.data.accessToken
-          );
-          alert("berhasil mengubah kategori");
-          setToken(newToken.data.accessToken);
-          props.setKategori(result.data.data);
-          hideForm();
-          setImage(null);
-          e.target.reset();
-        } catch (err) {
-          if (err.response.status === 400) {
-            alert(err.response.data.errors.join(" "));
-            return;
-          }
-          redirect("/login");
-        }
-      } else {
+        redirect("/login");
+      } else if (err.response.status === 400) {
         alert(err.response.data.errors.join(" "));
+      } else {
+        console.log(err);
       }
     }
   };

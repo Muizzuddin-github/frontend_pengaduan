@@ -1,10 +1,8 @@
 import Navigasi from "./Components/Menu/Navigasi";
 import { useState, useEffect } from "react";
 import SinglePengaduan from "./Components/Penanganan/SinglePengaduan";
-import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import penangananApi from "./api/penangananApi";
-import auth from "./api/auth";
 
 const Penanganan = () => {
   const [img, setImg] = useState(null);
@@ -12,7 +10,6 @@ const Penanganan = () => {
   const [imgUpload, setImgUpload] = useState(null);
   const [deskripsi, setDeskripsi] = useState("");
   const [errNotUploadImg, setErrNotUploadImg] = useState(false);
-  const [token, setToken] = useState("");
   const redirect = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
 
@@ -22,24 +19,22 @@ const Penanganan = () => {
 
   useEffect(function () {
     document.title = "Penanganan";
-    auth
-      .getToken()
-      .then(({ data }) => {
-        if (data.data[0].role !== "Admin") {
-          redirect("/dashboard");
-          return;
-        }
-        penangananApi
-          .getSingle(id, data.accessToken)
-          .then((res) => {
-            setSinglePengaduan(res.data.data[0]);
-            setToken(data.accessToken);
-            setIsLogin(true);
-          })
-          .catch((err) => console.log(err));
+    penangananApi
+      .getSingle(id)
+      .then((res) => {
+        setSinglePengaduan(res.data.data[0]);
+        setIsLogin(true);
       })
       .catch((err) => {
-        redirect("/login");
+        if (err.response.status === 401) {
+          redirect("/login");
+        } else if (err.response.status === 403) {
+          redirect("/dashboard");
+        } else if (err.response.status === 400) {
+          alert(err.response.data.errors.join(" "));
+        } else {
+          console.log(err);
+        }
       });
   }, []);
 
@@ -59,51 +54,29 @@ const Penanganan = () => {
     data.append("pengaduanID", +id);
     data.append("status", jenisPengaduan);
 
-    if (jenisPengaduan === "Pilih") {
-      alert("silahkan piliah jenis penangan terlebih dahulu");
-      return;
-    }
-
     try {
+      if (jenisPengaduan === "Pilih") {
+        alert("silahkan piliah jenis penangan terlebih dahulu");
+        return;
+      }
+
       if (!imgUpload) {
         setErrNotUploadImg(true);
         return;
       }
 
-      await axios.post("http://localhost:8080/admin/penanganan", data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await penangananApi.add(data);
 
       alert("berhasil melakukan penanganan");
       redirect("/admin");
       e.target.reset();
     } catch (err) {
-      console.log(err);
       if (err.response.status === 401) {
-        try {
-          const { data } = await axios.get(
-            "http://localhost:8080/users/refresh-access-token"
-          );
-
-          await axios.post("http://localhost:8080/admin/penanganan", data, {
-            headers: {
-              Authorization: `Bearer ${data.token}`,
-            },
-          });
-
-          alert("berhasil melakukan penanganan");
-          redirect("/admin/pengaduan");
-        } catch (err) {
-          if (err.response.status === 404) {
-            alert(err.response.data.errors.join("\n"));
-            return;
-          }
-          redirect("/login");
-        }
-      } else if (err.response.status === 404) {
+        redirect("/login");
+      } else if (err.response.status === 400 || err.response.status === 404) {
         alert(err.response.data.errors.join("\n"));
+      } else {
+        console.log(err);
       }
     }
   };

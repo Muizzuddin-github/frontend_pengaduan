@@ -1,47 +1,20 @@
 import DetailPel from "./DetailPel";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import auth from "../../api/auth";
 import { Link } from "react-router-dom";
+import pengaduanApi from "../../api/pengaduanApi";
 
-const Cards = ({ data, setPengaduan, setToken, token, ubahId }) => {
+const Cards = ({ data, setPengaduan, ubahId }) => {
   const redirect = useNavigate();
 
   const handleTerima = async () => {
     try {
-      await axios.patch(
-        `http://localhost:8080/admin/pengaduan/${data.id}`,
-        {
-          status: "diproses",
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
+      await pengaduanApi.changeStatus(data.id);
       setPengaduan((prev) => prev.filter((v) => v.id != data.id));
     } catch (err) {
-      try {
-        const ref = await auth.getToken();
-
-        await axios.patch(
-          `http://localhost:8080/admin/pengaduan/${data.id}`,
-          {
-            status: "diproses",
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${ref.data.accessToken}`,
-            },
-          }
-        );
-
-        setToken(ref.data.accessToken);
-        setPengaduan(dataProses.data.data);
-      } catch (err) {
+      if (err.response.status === 401) {
         redirect("/login");
+      } else {
+        console.log(err);
       }
     }
   };

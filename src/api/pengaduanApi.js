@@ -1,12 +1,11 @@
 import axiosIns from "./axiosInstance";
 
 const pengaduanApi = {
-
-  getAllByStatus : (status,token) => axiosIns.get(`http://localhost:8080/admin/pengaduan/${status}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
+  getAllByStatus: (status) => axiosIns.get(`/admin/pengaduan/${status}`),
+  changeStatus: (id) =>
+    axiosIns.patch(`/admin/pengaduan/${id}`, {
+      status: "diproses",
+    }),
 };
 
 export default pengaduanApi;

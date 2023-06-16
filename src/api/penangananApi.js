@@ -1,15 +1,8 @@
 import axiosIns from "./axiosInstance";
 
 const penangananApi = {
-
-  getSingle : (id,token) => axiosIns.get(
-    `/admin/pengaduan-single/${id}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  )
+  getSingle: (id) => axiosIns.get(`/admin/pengaduan-single/${id}`),
+  add: (data) => axiosIns.post("/admin/penanganan", data),
 };
 
 export default penangananApi;

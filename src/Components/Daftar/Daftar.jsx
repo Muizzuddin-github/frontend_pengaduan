@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import daftar from "../../api/daftar";
 import { useNavigate } from "react-router-dom";
 import auth from "../../api/auth";
 
@@ -15,12 +14,7 @@ function Daftar() {
     auth
       .isLogin()
       .then(({ data }) => {
-        if (data.data[0].role) {
-          redirect("/admin");
-          return;
-        }
-
-        setIsLogin(false);
+        redirect(data.redirectURL);
       })
       .catch((err) => setIsLogin(false));
   }, []);
@@ -28,7 +22,7 @@ function Daftar() {
   const submit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await daftar.daftar({
+      await auth.daftar({
         username,
         email,
         password,

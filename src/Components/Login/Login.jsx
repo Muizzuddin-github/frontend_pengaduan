@@ -14,13 +14,7 @@ const login = () => {
     auth
       .isLogin()
       .then(({ data }) => {
-        if (data.data[0].role === "Admin") {
-          redirect("/admin");
-          return;
-        }else if(data.data[0].role === "User"){
-          redirect("/dashboard");
-          return;
-        }
+        redirect(data.redirectURL);
       })
       .catch((err) => setIsLogin(false));
   }, []);

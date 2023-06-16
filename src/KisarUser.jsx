@@ -3,7 +3,6 @@ import KomentarUser from "./Components/User/KomentarUser";
 import { useState, useEffect } from "react";
 import Konfirmasi from "./Components/User/Konfirmasi";
 import AddKomentar from "./Components/User/AddKomentar";
-import auth from "./api/auth";
 import { useNavigate } from "react-router-dom";
 import krisarApi from "./api/krisarApi";
 
@@ -11,29 +10,28 @@ const KisarUser = () => {
   const redirect = useNavigate();
   const [id, setID] = useState(0);
   const [komentar, setKomentar] = useState([]);
-  const [token, setToken] = useState("");
   const [user, setUser] = useState({});
 
   const [isLogin, setIsLogin] = useState(false);
 
   useEffect(function () {
     document.title = "Kritik Saran";
-    auth
-      .getToken()
-      .then(({ data }) => {
-        if (data.data[0].role !== "User") {
-          redirect("/admin");
-          return;
-        }
-
-        krisarApi.getAllByUser(data.accessToken).then((res) => {
-          setKomentar(res.data.data);
-          setIsLogin(true);
-          setToken(data.accessToken);
-          setUser(data.data[0]);
-        });
+    krisarApi
+      .getAllByUser()
+      .then((res) => {
+        setKomentar(res.data.data);
+        setIsLogin(true);
+        setUser(res.data.user);
       })
-      .catch((err) => redirect("/login"));
+      .catch((err) => {
+        if (err.response.status === 401) {
+          redirect("/login");
+        } else if (err.response.status === 403) {
+          redirect("/dashboard");
+        } else {
+          console.log(err);
+        }
+      });
   }, []);
 
   const form = () => {
@@ -48,19 +46,8 @@ const KisarUser = () => {
 
   return isLogin ? (
     <div className="kisar-user">
-      <Konfirmasi
-        id={id}
-        setKomentar={setKomentar}
-        komentar={komentar}
-        token={token}
-        setToken={setToken}
-      />
-      <AddKomentar
-        setKomentar={setKomentar}
-        komentar={komentar}
-        token={token}
-        setToken={setToken}
-      />
+      <Konfirmasi id={id} setKomentar={setKomentar} komentar={komentar} />
+      <AddKomentar setKomentar={setKomentar} komentar={komentar} />
       <NavigasiUser user={user} />
       <div>
         <div className="px-8 py-4">
@@ -79,8 +66,6 @@ const KisarUser = () => {
                 saran={v.saran}
                 setID={setID}
                 ubahKomentar={ubahKomentar}
-                token={token}
-                setToken={setToken}
               />
             ))}
           </div>

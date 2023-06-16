@@ -20,27 +20,25 @@ const ListKategori = () => {
   const [idKategori, setIdKategori] = useState(0);
   const [detilKategori, setDetilKategori] = useState({});
   const [kategori, setKategori] = useState([]);
-  const [token, setToken] = useState("");
   const [isLogin, setIsLogin] = useState(false);
 
   useEffect(function () {
     document.title = "List-kategori";
-    auth
-      .getToken()
-      .then(({ data }) => {
-        const isAdmin = data.data[0].role;
-        if (isAdmin !== "Admin") {
-          redirect("/dashboard");
-          return;
-        } else {
-          katPengaduanApi.getAll(data.accessToken).then((res) => {
-            setKategori(res.data.data);
-            setToken(data.accessToken);
-            setIsLogin(true);
-          });
-        }
+    katPengaduanApi
+      .getAll()
+      .then((res) => {
+        setKategori(res.data.data);
+        setIsLogin(true);
       })
-      .catch((err) => redirect("/login"));
+      .catch((err) => {
+        if (err.response.status === 401) {
+          redirect("/login");
+        } else if (err.response.status === 403) {
+          redirect("/dashboard");
+        } else {
+          console.log(err);
+        }
+      });
   }, []);
 
   return isLogin ? (
@@ -69,26 +67,15 @@ const ListKategori = () => {
           ))}
         </div>
         <div className="tambah">
-          <FormTambah
-            setKategori={setKategori}
-            token={token}
-            setToken={setToken}
-          />
+          <FormTambah setKategori={setKategori} />
         </div>
         <FormEdit
           detilKategori={detilKategori}
           idKategori={idKategori}
           setKategori={setKategori}
-          token={token}
-          setToken={setToken}
         />
       </div>
-      <ConfirmHapus
-        idKategoriHapus={idKategori}
-        setKategori={setKategori}
-        token={token}
-        setToken={setToken}
-      />
+      <ConfirmHapus idKategoriHapus={idKategori} setKategori={setKategori} />
     </>
   ) : (
     ""

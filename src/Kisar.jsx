@@ -3,32 +3,31 @@ import DetilKomentar from "./Components/komentar/DetilKomentar";
 import { useEffect, useState } from "react";
 import krisarApi from "./api/krisarApi";
 import Navigasi from "./Components/Menu/Navigasi";
-import auth from "./api/auth";
+import { useNavigate } from "react-router-dom";
 
 const Kisar = () => {
   const [kritik, setKritik] = useState({});
   const [komentar, setKomentar] = useState([]);
-  const [token, setToken] = useState("");
   const [isLogin, setIsLogin] = useState(false);
+  const redirect = useNavigate();
 
   useEffect(function () {
     document.title = "Krisar";
-    auth
-      .getToken()
-      .then(({ data }) => {
-        const isAdmin = data.data[0].role;
-        if (isAdmin !== "Admin") {
-          redirect("/dashboard");
-          return;
-        }
-
-        krisarApi.getAll(data.accessToken).then((res) => {
-          setToken(data.accessToken);
-          setIsLogin(true);
-          setKomentar(res.data.data);
-        });
+    krisarApi
+      .getAll()
+      .then((res) => {
+        setIsLogin(true);
+        setKomentar(res.data.data);
       })
-      .catch((err) => redirect("/login"));
+      .catch((err) => {
+        if (err.response.status === 401) {
+          redirect("/login");
+        } else if (err.response.status === 403) {
+          redirect("/dashboard");
+        } else {
+          console.log(err);
+        }
+      });
   }, []);
   return isLogin ? (
     <div className="kisar">

@@ -2,7 +2,6 @@ import Login from "./Components/Login/Login";
 
 import Daftar from "./Components/Daftar/Daftar";
 import { Routes, Route } from "react-router-dom";
-import PrivateRouteAdmin from "./Components/PrivateRouteAdmin";
 import Dashboard from "./Dashboard";
 import ListKategori from "./ListKategori";
 import Penanganan from "./Penanganan";
@@ -17,6 +16,10 @@ function App() {
       <Route path="/daftar" element={<Daftar />} />
       <Route path="/dashboard" element={<h1>menunggu design</h1>} />
       <Route path="/dashboard/kritik-saran" element={<KisarUser />} />
+      <Route
+        path="/dashboard/kritik-saran"
+        element={<h1>daftar pengaduan saya</h1>}
+      />
       <Route path="/admin" element={<Dashboard />} />
       <Route path="/admin/list-kategori" element={<ListKategori />} />
       <Route path="/admin/pengaduan/:id" element={<Penanganan />} />

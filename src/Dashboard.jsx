@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PopUpKonfir from "./Components/Pelayanan/PopUpKonfir";
 import pengaduanApi from "./api/pengaduanApi";
-import auth from "./api/auth";
 
 const Dashboard = () => {
   const [pengaduan, setPengaduan] = useState([]);
@@ -13,46 +12,32 @@ const Dashboard = () => {
   const [id, setId] = useState(0);
   const [isLogin, setIsLogin] = useState(false);
 
-  const [token, setToken] = useState("");
-
   useEffect(function () {
     document.title = "Admin";
-    auth
-      .getToken()
-      .then(({ data }) => {
-        const isAdmin = data.data[0].role;
-        if (isAdmin !== "Admin") {
-          redirect("/dashboard");
-          return;
-        }
 
-        pengaduanApi
-          .getAllByStatus("terkirim", data.accessToken)
-          .then((res) => {
-            setPengaduan(res.data.data);
-            setToken(data.accessToken);
-            setIsLogin(true);
-          });
+    pengaduanApi
+      .getAllByStatus("terkirim")
+      .then((res) => {
+        setPengaduan(res.data.data);
+        setIsLogin(true);
       })
-      .catch((err) => redirect("/login"));
+      .catch((err) => {
+        if (err.response.status === 401) {
+          redirect("/login");
+        } else if (err.response.status === 403) {
+          redirect("/dashboard");
+        } else {
+          console.log(err);
+        }
+      });
   }, []);
 
   const getPengaduan = async (status) => {
     try {
-      const dataPengaduan = await pengaduanApi.getAllByStatus(status, token);
+      const dataPengaduan = await pengaduanApi.getAllByStatus(status);
       setPengaduan(dataPengaduan.data.data);
     } catch (err) {
-      try {
-        const { data } = await auth.getToken();
-        const dataProses = await pengaduanApi.getAllByStatus(
-          status,
-          data.accessToken
-        );
-        setToken(data.accessToken);
-        setPengaduan(dataProses.data.data);
-      } catch (err) {
-        redirect("/login");
-      }
+      redirect("/login");
     }
   };
 
@@ -76,8 +61,6 @@ const Dashboard = () => {
             <Cards
               key={k}
               data={q}
-              token={token}
-              setToken={setToken}
               setPengaduan={setPengaduan}
               ubahId={ubahId}
             />

@@ -1,21 +1,22 @@
 import { useState } from "react";
-import auth from "../../api/auth";
 import krisarApi from "../../api/krisarApi";
+import { useNavigate } from "react-router-dom";
 
 const AddKomentar = (props) => {
   const [kritik, setKritik] = useState("");
   const [saran, setSaran] = useState("");
+  const redirect = useNavigate();
 
   const submit = async (e) => {
     try {
       e.preventDefault();
 
-      await krisarApi.add(props.token, {
+      await krisarApi.add({
         kritik,
         saran,
       });
 
-      const { data } = await krisarApi.getAllByUser(props.token);
+      const { data } = await krisarApi.getAllByUser();
       props.setKomentar(data.data);
 
       const addForm = e.target.parentElement.parentElement;
@@ -23,20 +24,13 @@ const AddKomentar = (props) => {
       addForm.classList.add("hidden");
       e.target.reset();
     } catch (err) {
-      const ref = await auth.getToken();
-      await krisarApi.add(ref.data.accessToken, {
-        kritik,
-        saran,
-      });
-
-      const { data } = await krisarApi.getAllByUser(ref.data.accessToken);
-
-      props.setKomentar(data.data);
-      props.setToken(ref.data.accessToken);
-      const addForm = e.target.parentElement.parentElement;
-      addForm.classList.remove("flex");
-      addForm.classList.add("hidden");
-      e.target.reset();
+      if (err.response.status === 401) {
+        redirect("/login");
+      } else if (err.response.status === 400) {
+        alert(err.response.data.errors.join(" "));
+      } else {
+        console.log(err);
+      }
     }
   };
 

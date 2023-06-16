@@ -2,9 +2,9 @@ import axiosIns from "./axiosInstance";
 
 const auth = {
   login: (data) => axiosIns.post("/users/login", data),
-  isLogin: () => axiosIns.get("/users/islogin"),
-  getToken: () => axiosIns.get("/users/refresh-access-token"),
+  daftar: (data) => axiosIns.post("/users/register", data),
   logout: () => axiosIns.put("/users/logout"),
+  isLogin: () => axiosIns.get("/users/islogin"),
 };
 
 export default auth;
