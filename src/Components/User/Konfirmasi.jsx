@@ -13,9 +13,8 @@ const Konfirmasi = (props) => {
   const hapus = async (e) => {
     try {
       await krisarApi.del(props.id);
-      const { data } = await krisarApi.getAllByUser();
-
-      props.setKomentar(data.data);
+      const data = props.komentar.filter((val) => val.id != props.id);
+      props.setKomentar(data);
       tutup(e);
     } catch (err) {
       if (err.response.status === 401) {

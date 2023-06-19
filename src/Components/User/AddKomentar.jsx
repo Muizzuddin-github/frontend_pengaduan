@@ -11,18 +11,17 @@ const AddKomentar = (props) => {
     try {
       e.preventDefault();
 
-      await krisarApi.add({
+      const { data } = await krisarApi.add({
         kritik,
         saran,
       });
-
-      const { data } = await krisarApi.getAllByUser();
-      props.setKomentar(data.data);
+      props.setKomentar((prev) => [...prev, data.data[0]]);
 
       const addForm = e.target.parentElement.parentElement;
       addForm.classList.remove("flex");
       addForm.classList.add("hidden");
       e.target.reset();
+      redirect("/dashboard/kritik-saran");
     } catch (err) {
       if (err.response.status === 401) {
         redirect("/login");
