@@ -1,5 +1,4 @@
 import IsiMenu from "./IsiMenu";
-import axios from "axios";
 
 const SideMenu = (props) => {
   const hideMenu = () => {
@@ -7,78 +6,6 @@ const SideMenu = (props) => {
     hideSideMenu.classList.add("-translate-x-full");
   };
 
-  const showCardMasuk = () => {
-    const btn = document.querySelector(".btn-cards");
-    btn.classList.remove("hidden");
-    props.setPengaduan([
-      {
-        id: 1,
-        nama: "Agus",
-        kendala: "banjir",
-        lokasi: "Jl.Matahari",
-        status: "terkirim",
-      },
-      {
-        id: 2,
-        nama: "Budi",
-        kendala: "tsunami",
-        lokasi: "Jl.Matahari",
-        status: "terkirim",
-      },
-      {
-        id: 3,
-        nama: "Bambang",
-        kendala: "skill issue",
-        lokasi: "Jl.Matahari",
-        status: "terkirim",
-      },
-      {
-        id: 4,
-        nama: "Siti",
-        kendala: "banjir",
-        lokasi: "Jl.Matahari",
-        status: "terkirim",
-      },
-    ]);
-  };
-  const showCardproses = () => {
-    const btn = document.querySelector(".btn-cards");
-    btn.classList.remove("hidden");
-    props.setPengaduan([
-      {
-        id: 1,
-        nama: "tito",
-        kendala: "banjir",
-        lokasi: "jl.bunga",
-        status: "diproses",
-      },
-    ]);
-  };
-  const showCardSelesai = () => {
-    const btn = document.querySelector(".btn-cards");
-    btn.classList.add("hidden");
-    props.setPengaduan([
-      {
-        id: 1,
-        nama: "Arda",
-        kendala: "Lampu Jalan Mati",
-        lokasi: "Jl. bulan",
-      },
-    ]);
-  };
-
-  const showCardDitolak = () => {
-    const btn = document.querySelector(".btn-cards");
-    btn.classList.add("hidden");
-    props.setPengaduan([
-      {
-        id: 1,
-        nama: "Budi",
-        kendala: "Pohon Tumbang",
-        lokasi: "Jl. desa lain",
-      },
-    ]);
-  };
   return (
     <div>
       <div className="aside-bar fixed top-0 left-0 z-40 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white w-80 dark:bg-gray-800">

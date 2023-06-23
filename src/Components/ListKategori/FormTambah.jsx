@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import katPengaduanApi from "../../api/katPengaduanApi";
-import auth from "../../api/auth";
 
 const FormTambah = (props) => {
   const [image, setImage] = useState(null);
@@ -22,11 +21,9 @@ const FormTambah = (props) => {
     data.append("deskripsi", deskripsi);
     data.append("foto", uploadFoto);
     try {
-      await katPengaduanApi.add(data);
-
-      const result = await katPengaduanApi.getAll();
+      const result = await katPengaduanApi.add(data);
       alert("berhasil menambah kategori");
-      props.setKategori(result.data.data);
+      props.setKategori((prev) => [...prev,result.data.data[0]]);
       hideForm();
       e.target.reset();
       setImage(null);
@@ -35,6 +32,7 @@ const FormTambah = (props) => {
         redirect("/login");
       } else if (err.response.status === 400) {
         alert(err.response.data.errors.join(" "));
+        console.log(err.response)
       } else {
         console.log(err);
       }

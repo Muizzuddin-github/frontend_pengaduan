@@ -4,10 +4,10 @@ const ConfirmHapus = (props) => {
   const hapusKategori = async () => {
     try {
       await katPengaduanApi.del(props.idKategoriHapus);
-
-      const result = await katPengaduanApi.getAll();
       alert("berhasil menghapus");
-      props.setKategori(result.data.data);
+      props.setKategori((prev) => {
+        return prev.filter((val) => val.id != props.idKategoriHapus)
+      });
       const close = document.querySelector(".hapus-kategori");
       close.classList.add("hidden");
     } catch (err) {

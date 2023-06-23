@@ -46,8 +46,8 @@ const KisarUser = () => {
 
   return isLogin ? (
     <div className="kisar-user">
-      <Konfirmasi id={id} setKomentar={setKomentar} komentar={komentar} />
-      <AddKomentar setKomentar={setKomentar} komentar={komentar} />
+      <Konfirmasi id={id} setKomentar={setKomentar} />
+      <AddKomentar setKomentar={setKomentar} />
       <NavigasiUser user={user} />
       <div>
         <div className="px-8 py-4">

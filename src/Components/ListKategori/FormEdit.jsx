@@ -38,9 +38,22 @@ const FormEdit = (props) => {
     data.append("foto", uploadFoto);
     try {
       await katPengaduanApi.edit(props.idKategori, data);
-      const result = await katPengaduanApi.getAll();
       alert("berhasil mengubah kategori");
-      props.setKategori(result.data.data);
+      props.setKategori((prev) => {
+        return prev.map((val) => {
+          if(val.id === props.idKategori){
+            if(image){
+              val.nama = judul
+              val.deskripsi = deskripsi
+              val.foto = image
+            }else{
+              val.nama = judul
+              val.deskripsi = deskripsi
+            }
+          }
+          return val
+        })
+      });
       hideForm();
       setImage(null);
       e.target.reset();
