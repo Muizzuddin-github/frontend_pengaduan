@@ -48,12 +48,12 @@ const ListKategori = () => {
       <div className="px-8 py-8">
         <div className="flex justify-between items-center mt-5 p-5">
           <h1 className="font-bold text-2xl">List Kategori</h1>
-          <button onClick={showForm}>
-            <span className="text-lg font-bold">Tambah</span>
+          <button onClick={showForm} className="flex items-center">
+            <span className="text-lg font-bold mr-5">Tambah</span>
             <i className="fa-solid fa-plus text-3xl text-gray-600"></i>
           </button>
         </div>
-        <div className="px-4 py-4 flex flex-wrap ">
+        <div className="px-4 py-4 flex flex-wrap justify-center">
           {kategori.map((x, i) => (
             <CardsKategori
               key={i}

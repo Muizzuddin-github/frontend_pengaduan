@@ -16,9 +16,9 @@ const CardsKategori = (props) => {
   };
   return (
     <>
-      <div className="card card-compact w-72 bg-base-100 shadow-xl bg-black rounded-lg m-4">
-        <figure>
-          <img className="h-56 w-auto" src={props.urlFoto} alt="Shoes" />
+      <div className="card card-compact w-72 bg-base-100 shadow-xl bg-black rounded-lg m-4 drop-shadow-lg">
+        <figure className="w-full h-56 bg-slate-100">
+          <img className="w-full h-full rounded-t-lg" src={props.urlFoto} alt="Shoes" />
         </figure>
         <div className="p-3">
           <h3 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">

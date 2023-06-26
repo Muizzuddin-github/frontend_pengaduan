@@ -29,10 +29,10 @@ const Cards = ({ data, setPengaduan, ubahId }) => {
   return (
     <div className="p-6">
       <div className="w-[60%] mx-auto shadow-lg">
-        <div className="relative m-0 flex bg-white p-4 rounded-md">
+        <div className="relative m-0 flex bg-slate-100 border border-black  p-4 rounded-md">
           <div className="flex-no-shrink">
             <img
-              className="w-[400px] h-64 block mx-auto"
+              className="w-[400px] h-64 block mx-auto rounded-sm"
               src={data.foto}
               alt={""}
             />

@@ -11,7 +11,7 @@ import KisarUser from "./KisarUser";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<h1>hello</h1>} />
+      <Route path="/" element={<h1 className="text-7xl text-center font-bold">Belum Ada 😁😅</h1>} />
       <Route path="/login" element={<Login />} />
       <Route path="/daftar" element={<Daftar />} />
       <Route path="/dashboard" element={<h1>menunggu design</h1>} />

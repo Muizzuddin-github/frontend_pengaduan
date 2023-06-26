@@ -46,7 +46,7 @@ const Dashboard = () => {
   };
 
   return isLogin ? (
-    <div className="dash-admin bg-slate-300">
+    <div className="dash-admin ">
       <div>
         <div className="text-right">
           <Navigasi />
