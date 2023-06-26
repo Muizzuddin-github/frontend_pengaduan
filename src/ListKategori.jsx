@@ -5,8 +5,7 @@ import { useState, useEffect } from "react";
 import ConfirmHapus from "./Components/ListKategori/ConfirmHapus";
 import { useNavigate } from "react-router-dom";
 import FormEdit from "./Components/ListKategori/FormEdit";
-import katPengaduanApi from "./api/katPengaduanApi";
-import auth from "./api/auth";
+import katPengaduanApi from "./api/katPengaduanApi"
 
 const ListKategori = () => {
   const showForm = () => {
@@ -50,6 +49,7 @@ const ListKategori = () => {
         <div className="flex justify-between items-center mt-5 p-5">
           <h1 className="font-bold text-2xl">List Kategori</h1>
           <button onClick={showForm}>
+            <span className="text-lg font-bold">Tambah</span>
             <i className="fa-solid fa-plus text-3xl text-gray-600"></i>
           </button>
         </div>
