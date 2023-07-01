@@ -9,3 +9,18 @@
 .bg-form {
   background-color: rgba(0, 0, 0, 0.8);
 }
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+}
+
+@layer utilities {
+  .btn-primary {
+    @apply font-medium py-4 px-8 text-dark-blue bg-secondary-yellow rounded-[8px] hover:bg-secondary-yellow-hover transition duration-300;
+  }
+  .btn-secondary {
+    @apply font-medium py-4 px-8 text-white bg-light-blue rounded-[8px] hover:bg-light-blue-hover transition duration-300;
+  }
+}

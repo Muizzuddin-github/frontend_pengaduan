@@ -1,4 +1,6 @@
 import Login from "./Components/Login/Login";
+import { useEffect } from "react";
+import AOS from "aos";
 
 import Daftar from "./Components/Daftar/Daftar";
 import { Routes, Route } from "react-router-dom";
@@ -7,15 +9,31 @@ import ListKategori from "./ListKategori";
 import Penanganan from "./Penanganan";
 import Kisar from "./Kisar";
 import KisarUser from "./KisarUser";
+import PengaduanUser from "./PengaduanUser";
+import Home from "./Home";
+import "aos/dist/aos.css";
 
 function App() {
+  useEffect(() => {
+    AOS.init({
+      duration: 2500,
+      delay: 400,
+    });
+  }, []);
+
   return (
     <Routes>
-      <Route path="/" element={<h1 className="text-7xl text-center font-bold">Belum Ada 😁😅</h1>} />
+      <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/daftar" element={<Daftar />} />
-      <Route path="/dashboard" element={<h1>menunggu design</h1>} />
+      <Route path="/dashboard" element={<PengaduanUser />} />
       <Route path="/dashboard/kritik-saran" element={<KisarUser />} />
+      <Route
+        path="/dashboard/pengaduan"
+        element={
+          <h1 className="text-7xl text-center font-bold">Belum Ada 😁😅</h1>
+        }
+      />
       <Route
         path="/dashboard/kritik-saran"
         element={<h1>daftar pengaduan saya</h1>}

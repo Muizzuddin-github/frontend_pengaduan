@@ -6,6 +6,7 @@ const pengaduanApi = {
     axiosIns.patch(`/admin/pengaduan/${id}`, {
       status: "diproses",
     }),
+  add: (data) => axiosIns.post("/user/pengaduan", data),
 };
 
 export default pengaduanApi;

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import auth from "../../api/auth";
+import { Link } from "react-router-dom";
 
 const FormLogin = () => {
   const [email, setEmail] = useState("");
@@ -75,12 +76,12 @@ const FormLogin = () => {
 
       <p className="text-sm font-light text-gray-500 dark:text-gray-400">
         Belum Punya Akun?{" "}
-        <a
-          href="#"
+        <Link
+          to="/daftar"
           className="font-medium text-primary-600 hover:underline dark:text-primary-500"
         >
           Daftar
-        </a>
+        </Link>
       </p>
     </form>
   );
