@@ -19,8 +19,12 @@ const FormLogin = () => {
       });
       redirect(data.redirectURL);
       alert(`Berhasil Login ${email} ${password}`);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      if (err.response.status === 404) {
+        alert(err.response.data.errors.join(" "));
+      } else {
+        console.log(err);
+      }
     }
   };
   return (

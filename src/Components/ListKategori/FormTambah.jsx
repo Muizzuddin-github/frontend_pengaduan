@@ -32,7 +32,6 @@ const FormTambah = (props) => {
         redirect("/login");
       } else if (err.response.status === 400) {
         alert(err.response.data.errors.join(" "));
-        console.log(err.response)
       } else {
         console.log(err);
       }
