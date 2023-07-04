@@ -60,7 +60,7 @@ const Penanganan = () => {
         return;
       }
 
-      if (!imgUpload) {
+      if (!imgUpload && jenisPengaduan === "selesai") {
         setErrNotUploadImg(true);
         return;
       }
