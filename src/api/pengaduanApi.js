@@ -7,6 +7,7 @@ const pengaduanApi = {
       status: "diproses",
     }),
   add: (data) => axiosIns.post("/user/pengaduan", data),
+  getAllByUserAndStatus: (status) => axiosIns.get(`user/pengaduan/${status}`),
 };
 
 export default pengaduanApi;

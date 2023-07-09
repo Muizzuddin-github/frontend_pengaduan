@@ -10,6 +10,7 @@ import Penanganan from "./Penanganan";
 import Kisar from "./Kisar";
 import KisarUser from "./KisarUser";
 import PengaduanUser from "./PengaduanUser";
+import ListPengaduanUser from "./ListPengaduanUser";
 import Home from "./Home";
 import "aos/dist/aos.css";
 
@@ -28,16 +29,7 @@ function App() {
       <Route path="/daftar" element={<Daftar />} />
       <Route path="/dashboard" element={<PengaduanUser />} />
       <Route path="/dashboard/kritik-saran" element={<KisarUser />} />
-      <Route
-        path="/dashboard/pengaduan"
-        element={
-          <h1 className="text-7xl text-center font-bold">Belum Ada 😁😅</h1>
-        }
-      />
-      <Route
-        path="/dashboard/kritik-saran"
-        element={<h1>daftar pengaduan saya</h1>}
-      />
+      <Route path="/dashboard/pengaduan" element={<ListPengaduanUser />} />
       <Route path="/admin" element={<Dashboard />} />
       <Route path="/admin/list-kategori" element={<ListKategori />} />
       <Route path="/admin/pengaduan/:id" element={<Penanganan />} />
